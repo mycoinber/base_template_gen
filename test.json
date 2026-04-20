@@ -1,0 +1,625 @@
+{
+    "id": "69444c910a00cd262b687511",
+    "slug": "parimatch",
+    "homePage": 1,
+    "status": "draft",
+    "article": {
+        "h1": "Parimatch – онлайн-казино для игроков Узбекистана",
+        "blocks": [
+            {
+                "type": "intro",
+                "order": 0,
+                "headline": "Parimatch – онлайн-казино для игроков Узбекистана",
+                "content": "<p>Parimatch доступен игрокам из Узбекистана как международный оператор с локальными опциями. Вы можете пользоваться русскоязычным интерфейсом и выбрать удобный метод пополнения счёта. Проверьте, какие способы оплаты доступны в вашей стране: карты, локальные кошельки или международные платёжные системы. Регистрация проходит через номер телефона или email: введите данные, подтвердите код и установите пароль.</p><p>Проверка личности обычно требуется перед выводом средств — приготовьте паспорт или другой документ. Обратите внимание на комиссии и сроки вывода. Важно смотреть адрес сайта и включать защищённое соединение. Начните с небольшой суммы, чтобы проверить скорость зачисления и выводов.</p><p>Пример: вы регистрируетесь, пополняете счёт эквивалентом 10 USD и делаете первую ставку в деморежиме или на минимальную ставку. Сохраняйте подтверждения платежей и переписку со службой поддержки на случай спора.</p><p>Короткий совет: устанавливайте лимит трат и включайте двухфакторную аутентификацию, если она доступна.</p>",
+                "keywords": [],
+                "lsi": [],
+                "reviews": null,
+                "faqs": null,
+                "image": {
+                    "id": "694576f45497d56142db905d",
+                    "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.png",
+                    "filename": "2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "title": "Parimatch – онлайн-казино для игроков Узбекистана",
+                    "alt": "Parimatch – онлайн-казино для игроков Узбекистана",
+                    "type": "image/png",
+                    "variants": [
+                        {
+                            "width": 320,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db905e"
+                        },
+                        {
+                            "width": 480,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db905f"
+                        },
+                        {
+                            "width": 640,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9060"
+                        },
+                        {
+                            "width": 768,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9061"
+                        },
+                        {
+                            "width": 1024,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9062"
+                        },
+                        {
+                            "width": 1280,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9063"
+                        },
+                        {
+                            "width": 1600,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9064"
+                        }
+                    ]
+                },
+                "imageMedia": {
+                    "id": "694576f45497d56142db905d",
+                    "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.png",
+                    "filename": "2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "title": "Parimatch – онлайн-казино для игроков Узбекистана",
+                    "alt": "Parimatch – онлайн-казино для игроков Узбекистана",
+                    "type": "image/png",
+                    "variants": [
+                        {
+                            "width": 320,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db905e"
+                        },
+                        {
+                            "width": 480,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db905f"
+                        },
+                        {
+                            "width": 640,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9060"
+                        },
+                        {
+                            "width": 768,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9061"
+                        },
+                        {
+                            "width": 1024,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9062"
+                        },
+                        {
+                            "width": 1280,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9063"
+                        },
+                        {
+                            "width": 1600,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                            "_id": "694576f45497d56142db9064"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "h2",
+                "order": 1,
+                "headline": "Как зарегистрироваться в Parimatch",
+                "content": "<p>Париматч даёт игрокам из Узбекистана контролируемую процедуру регистрации: подтверждение телефона через SMS в формате +998 ускоряет доступ к личному кабинету и выбранным способам пополнения, а пошаговый подход снижает риск ошибок при верификации.</p>\n<p>Дальше — таблица с основными шагами и подробные подсказки с примерами ввода номера, образцом SMS‑кода и практическими советами по защите аккаунта.</p>\n<table>\n<thead><tr><th>Шаг</th><th>Действие</th><th>Пример / срок</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Выбор региона и открытие формы</td><td>Укажите «Узбекистан»</td></tr>\n<tr><td>2</td><td>Ввод номера и запрос кода</td><td>Пример: +99894 123 45 67 — код обычно приходит в 1–2 минуты</td></tr>\n<tr><td>3</td><td>Создание пароля и подтверждение</td><td>Пароль ≥8 символов; сохраните в менеджере паролей</td></tr>\n<tr><td>4</td><td>Верификация документов (при запросе)</td><td>Фото разворота паспорта и селфи — проверка 24–72 ч</td></tr>\n</tbody>\n</table>\n<h3>Как зарегистрироваться в Parimatch</h3>\n<p>Откройте официальный сайт или приложение, выберите регион и нажмите «Регистрация». В поле телефона вводите +998 и девятизначный номер без пробелов — например, +998941234567. Нажмите «Получить код»: в SMS придёт четырехзначный одноразовый код (в примере 4729). Введите код и завершите создание пароля.</p>\n<p>При Париматч регистрация обращайте внимание на формат телефона и действующий email: они понадобятся для восстановления доступа и уведомлений о статусе верификации.</p>\n<p>Советы по безопасности при Париматч регистрация:</p>\n<ul>\n<li>Используйте уникальный пароль длиной не менее восьми символов и храните его в надёжном менеджере.</li>\n<li>Не сообщайте данные входа третьим лицам; при подозрении на рассылку фишинговых ссылок — свяжитесь со службой поддержки.</li>\n<li>Включите двухфакторную аутентификацию, если такая опция доступна, и запишите резервные коды.</li>\n</ul>\n<h3>Как войти в Parimatch</h3>\n<p>Вход осуществляется по номеру или email и паролю. При первом входе система может запросить дополнительную проверку через SMS. Если пароль утерян, инициируйте восстановление через email или привязанный номер — на него придут инструкции.</p>\n<p>Париматч УЗ рекомендует после первого входа проверить раздел «Настройки»: подтвердите регион, настройте способы пополнения и включите дополнительные опции безопасности. Париматч УЗ также советует сохранять подтверждающие скриншоты и номер обращения в службу поддержки на случай задержки верификации или спорных ситуаций.</p>\n<p>Если SMS не приходит, проверьте корректность номера и блокировку сообщений у оператора; при длительной задержке отправьте запрос в поддержку с указанием времени и примера операции.</p>",
+                "keywords": [
+                    "Париматч",
+                    "Париматч регистрация",
+                    "Париматч УЗ"
+                ],
+                "lsi": [],
+                "reviews": null,
+                "faqs": null,
+                "image": {
+                    "id": "694576f95497d56142db906d",
+                    "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                    "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.png",
+                    "filename": "2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                    "title": "Как зарегистрироваться в Parimatch",
+                    "alt": "Как зарегистрироваться в Parimatch",
+                    "type": "image/png",
+                    "variants": [
+                        {
+                            "width": 320,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db906e"
+                        },
+                        {
+                            "width": 480,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db906f"
+                        },
+                        {
+                            "width": 640,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9070"
+                        },
+                        {
+                            "width": 768,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9071"
+                        },
+                        {
+                            "width": 1024,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9072"
+                        },
+                        {
+                            "width": 1280,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9073"
+                        },
+                        {
+                            "width": 1600,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9074"
+                        }
+                    ]
+                },
+                "imageMedia": {
+                    "id": "694576f95497d56142db906d",
+                    "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                    "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.png",
+                    "filename": "2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                    "title": "Как зарегистрироваться в Parimatch",
+                    "alt": "Как зарегистрироваться в Parimatch",
+                    "type": "image/png",
+                    "variants": [
+                        {
+                            "width": 320,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db906e"
+                        },
+                        {
+                            "width": 480,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db906f"
+                        },
+                        {
+                            "width": 640,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9070"
+                        },
+                        {
+                            "width": 768,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9071"
+                        },
+                        {
+                            "width": 1024,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9072"
+                        },
+                        {
+                            "width": 1280,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9073"
+                        },
+                        {
+                            "width": 1600,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-01-59.288Z_parimatch-d86d1e43.webp",
+                            "_id": "694576f95497d56142db9074"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "review",
+                "order": 2,
+                "headline": "Отзывы о Parimatch",
+                "content": null,
+                "keywords": [],
+                "lsi": [],
+                "reviews": [
+                    {
+                        "authorBio": "Алишер (AliGamer)",
+                        "authorAvatar": {
+                            "id": "6945786e5497d56142db91b3",
+                            "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.png",
+                            "filename": "2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "title": "Отзывы о Parimatch",
+                            "alt": "Отзывы о Parimatch",
+                            "type": "image/png",
+                            "variants": [
+                                {
+                                    "width": 320,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b4"
+                                },
+                                {
+                                    "width": 480,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b5"
+                                },
+                                {
+                                    "width": 640,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b6"
+                                },
+                                {
+                                    "width": 768,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b7"
+                                },
+                                {
+                                    "width": 1024,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b8"
+                                },
+                                {
+                                    "width": 1280,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b9"
+                                },
+                                {
+                                    "width": 1600,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91ba"
+                                }
+                            ]
+                        },
+                        "rating": 5,
+                        "content": "<p>Я регулярно оформлял выводы с Parimatch и отслеживал, как быстро приходят выплаты. Процесс включает заявку на вывод и проверку аккаунта — иногда требуется дополнительная переписка со службой поддержки.<br/>Деньги приходили в полном объёме, проблем с потерями средств не заметил. Советую заранее пройти верификацию и хранить подтверждающие документы — это ускорит получение выплат.</p>",
+                        "authorAvatarMedia": {
+                            "id": "6945786e5497d56142db91b3",
+                            "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.png",
+                            "filename": "2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "title": "Отзывы о Parimatch",
+                            "alt": "Отзывы о Parimatch",
+                            "type": "image/png",
+                            "variants": [
+                                {
+                                    "width": 320,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b4"
+                                },
+                                {
+                                    "width": 480,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b5"
+                                },
+                                {
+                                    "width": 640,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b6"
+                                },
+                                {
+                                    "width": 768,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b7"
+                                },
+                                {
+                                    "width": 1024,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b8"
+                                },
+                                {
+                                    "width": 1280,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91b9"
+                                },
+                                {
+                                    "width": 1600,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                                    "_id": "6945786e5497d56142db91ba"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "authorBio": "Нигина (Niga24)",
+                        "authorAvatar": {
+                            "id": "6945786b5497d56142db91a4",
+                            "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                            "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.png",
+                            "filename": "2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                            "title": "Отзывы о Parimatch",
+                            "alt": "Отзывы о Parimatch",
+                            "type": "image/png",
+                            "variants": [
+                                {
+                                    "width": 320,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a5"
+                                },
+                                {
+                                    "width": 480,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a6"
+                                },
+                                {
+                                    "width": 640,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a7"
+                                },
+                                {
+                                    "width": 768,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a8"
+                                },
+                                {
+                                    "width": 1024,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a9"
+                                },
+                                {
+                                    "width": 1280,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91aa"
+                                },
+                                {
+                                    "width": 1600,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91ab"
+                                }
+                            ]
+                        },
+                        "rating": 4,
+                        "content": "<p>Обращалась в поддержку Parimatch при верификации и при возникшей задержке с выводом. Операторы дали понятные инструкции, но время ответа иногда варьировалось.<br/>В итоге проблему решили после загрузки документов, счёт разблокировали и выплата прошла. Рекомендую подготовить сканы документов заранее и подробно описывать проблему в обращении.</p>",
+                        "authorAvatarMedia": {
+                            "id": "6945786b5497d56142db91a4",
+                            "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                            "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.png",
+                            "filename": "2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                            "title": "Отзывы о Parimatch",
+                            "alt": "Отзывы о Parimatch",
+                            "type": "image/png",
+                            "variants": [
+                                {
+                                    "width": 320,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a5"
+                                },
+                                {
+                                    "width": 480,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a6"
+                                },
+                                {
+                                    "width": 640,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a7"
+                                },
+                                {
+                                    "width": 768,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a8"
+                                },
+                                {
+                                    "width": 1024,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91a9"
+                                },
+                                {
+                                    "width": 1280,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91aa"
+                                },
+                                {
+                                    "width": 1600,
+                                    "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-08-08.819Z_parimatch-8c34c84a.webp",
+                                    "_id": "6945786b5497d56142db91ab"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "authorBio": "Равшан (RavshanMobile)",
+                        "authorAvatar": null,
+                        "rating": 5,
+                        "content": "<p>Часто пользуюсь Parimatch через смартфон и проверял, как работает мобильная версия и меню. Интерфейс интуитивный, основные разделы быстро находишь, приложение в моём опыте было стабильным.<br/>Бонусы присутствуют, но важно внимательно читать условия отыгрыша перед активацией. Совет: попробуйте мобильную версию в деморежиме и изучите правила бонусов перед ставками.</p>"
+                    }
+                ],
+                "faqs": null,
+                "image": {
+                    "id": "6945786e5497d56142db91b3",
+                    "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                    "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.png",
+                    "filename": "2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                    "title": "Отзывы о Parimatch",
+                    "alt": "Отзывы о Parimatch",
+                    "type": "image/png",
+                    "variants": [
+                        {
+                            "width": 320,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b4"
+                        },
+                        {
+                            "width": 480,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b5"
+                        },
+                        {
+                            "width": 640,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b6"
+                        },
+                        {
+                            "width": 768,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b7"
+                        },
+                        {
+                            "width": 1024,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b8"
+                        },
+                        {
+                            "width": 1280,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b9"
+                        },
+                        {
+                            "width": 1600,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91ba"
+                        }
+                    ]
+                },
+                "imageMedia": {
+                    "id": "6945786e5497d56142db91b3",
+                    "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                    "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.png",
+                    "filename": "2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                    "title": "Отзывы о Parimatch",
+                    "alt": "Отзывы о Parimatch",
+                    "type": "image/png",
+                    "variants": [
+                        {
+                            "width": 320,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b4"
+                        },
+                        {
+                            "width": 480,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b5"
+                        },
+                        {
+                            "width": 640,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b6"
+                        },
+                        {
+                            "width": 768,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b7"
+                        },
+                        {
+                            "width": 1024,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b8"
+                        },
+                        {
+                            "width": 1280,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91b9"
+                        },
+                        {
+                            "width": 1600,
+                            "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-08-11.259Z_parimatch-4ab548bf.webp",
+                            "_id": "6945786e5497d56142db91ba"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "head": {
+        "title": "Parimatch в Узбекистане: регистрация, платежи и отзывы игроков",
+        "description": "Краткое руководство по Parimatch для игроков Узбекистана: регистрация через +998, локальные способы оплаты, советы по верификации и отзывы о выплатах и поддержке.",
+        "keywords": [
+            "Париматч",
+            "Париматч регистрация",
+            "Париматч уз",
+            "регистрация +998",
+            "верификация Париматч",
+            "отзывы Париматч",
+            "пополнение счёта Париматч"
+        ],
+        "canonicalUrl": null,
+        "robots": "noindex,nofollow",
+        "ogImageId": "694576f45497d56142db905d",
+        "meta": [
+            {
+                "name": "description",
+                "property": null,
+                "content": "Краткое руководство по Parimatch для игроков Узбекистана: регистрация через +998, локальные способы оплаты, советы по верификации и отзывы о выплатах и поддержке."
+            },
+            {
+                "name": "keywords",
+                "property": null,
+                "content": "Париматч, Париматч регистрация, Париматч уз, регистрация +998, верификация Париматч, отзывы Париматч, пополнение счёта Париматч"
+            },
+            {
+                "name": null,
+                "property": "og:title",
+                "content": "Parimatch в Узбекистане: регистрация, платежи и отзывы игроков"
+            },
+            {
+                "name": null,
+                "property": "og:description",
+                "content": "Краткое руководство по Parimatch для игроков Узбекистана: регистрация через +998, локальные способы оплаты, советы по верификации и отзывы о выплатах и поддержке."
+            },
+            {
+                "name": null,
+                "property": "og:type",
+                "content": "article"
+            },
+            {
+                "name": null,
+                "property": "og:image",
+                "content": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp"
+            },
+            {
+                "name": null,
+                "property": "twitter:card",
+                "content": "summary_large_image"
+            }
+        ],
+        "ogImage": {
+            "id": "694576f45497d56142db905d",
+            "path": "/siteid/69444c900a00cd262b687505/resized/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+            "originalPath": "/siteid/69444c900a00cd262b687505/uploads/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.png",
+            "filename": "2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+            "title": "Parimatch – онлайн-казино для игроков Узбекистана",
+            "alt": "Parimatch – онлайн-казино для игроков Узбекистана",
+            "type": "image/png",
+            "variants": [
+                {
+                    "width": 320,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/320/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db905e"
+                },
+                {
+                    "width": 480,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/480/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db905f"
+                },
+                {
+                    "width": 640,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/640/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db9060"
+                },
+                {
+                    "width": 768,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/768/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db9061"
+                },
+                {
+                    "width": 1024,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/1024/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db9062"
+                },
+                {
+                    "width": 1280,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/1280/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db9063"
+                },
+                {
+                    "width": 1600,
+                    "path": "/siteid/69444c900a00cd262b687505/resized/1600/2025-12-19T16-01-53.377Z_parimatch-ccd7185a.webp",
+                    "_id": "694576f45497d56142db9064"
+                }
+            ]
+        }
+    },
+    "createdAt": "2025-12-18T18:48:49.647Z",
+    "updatedAt": "2025-12-19T16:10:40.731Z",
+    "website": "69444c900a00cd262b687505",
+    "spec": "69444c910a00cd262b68750b"
+}

@@ -1,0 +1,35 @@
+{
+    "en": {
+      "login": "Login",
+      "registration": "Registration",
+      "author": "Author1",
+      "table_of_content": "Table of Content",
+      "home": "Home",
+      "bonus": "Bonus",
+      "terms_apply": "Terms Apply",
+      "play_responsibility": "Play Responsibility",
+      "play": "Play"
+    },
+    "tr-TR": {
+      "login": "Login",
+      "registration": "Registration",
+      "author": "Author112312",
+      "table_of_content": "Table of Content",
+      "home": "Home",
+      "bonus": "Bonus",
+      "terms_apply": "Terms Apply",
+      "play_responsibility": "Play Responsibility",
+      "play": "Play"
+    },
+    "ru": {
+      "login": "Войти",
+      "registration": "Регистрация",
+      "author": "Автор",
+      "table_of_content": "Содержание",
+      "home": "Главная",
+      "bonus": "Бонус",
+      "terms_apply": "Условия применяются",
+      "play_responsibility": "Играйте ответственно",
+      "play": "Играть"
+    }
+  } 

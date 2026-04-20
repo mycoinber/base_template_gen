@@ -1,0 +1,778 @@
+<template>
+  <main>
+    <Main v-if="data?.type" :data="data" />
+  </main>
+  <!-- SSR-rendered body code blocks -->
+  <div v-for="(code, i) in bodyHtmlCodes" :key="'bh-'+i" v-html="code" />
+  <component v-for="(code, i) in bodyJsCodes" :key="'bjs-'+i" :is="'script'" type="text/javascript">{{ code }}</component>
+</template>
+
+<script setup>
+import { useI18n } from "vue-i18n";
+import { manifestToHead } from "#layers/base/utils/manifestHead";
+import { dedupeLinks, dedupeMeta, toContentString } from "#layers/base/utils/headUtils";
+const { locale } = useI18n();
+const url = useRequestURL();
+const siteDomain = `${url.protocol}//${url.host}`;
+const config = useRuntimeConfig();
+const route = useRoute();
+
+const siteId = import.meta.server ? config.server.siteId : config.public.siteId;
+
+// Сборка slug-а из catch-all
+const rawSlug = route.params.slug;
+
+const slugArray = Array.isArray(rawSlug)
+  ? rawSlug
+  : typeof rawSlug === "string"
+    ? rawSlug.split("/")
+    : [];
+
+const slug = slugArray.length ? slugArray.join("/") : "";
+// Получаем данные страницы
+const { data, status, error } = await usePageData(siteId, slug);
+
+if (error.value) {
+  throw error.value;
+}
+
+const { data: siteManifestRaw } = await useSiteManifest();
+
+const manifestHead = computed(() => manifestToHead(siteManifestRaw.value));
+
+// --- HEAD LOGIC ---
+
+const pageHead = computed(() => data.value?.head || {});
+const pagePrimaryLang = computed(() => data.value?.primaryLang || null);
+const pageLang = computed(() => data.value?.lang || pagePrimaryLang.value || "en");
+const pageDomain = computed(() => data.value?.domain || siteDomain);
+const pageSlug = computed(() => normalizeSlugForPath(data.value?.slug || slug || ""));
+const canonicalSlugValue = computed(() => normalizeSlugForPath(data.value?.canonicalSlug || data.value?.slug || slug || ""));
+const pageUrl = computed(() => buildAbsoluteHref(pageDomain.value, pageSlug.value));
+
+const canonicalHref = computed(() => buildAbsoluteHref(pageDomain.value, pageSlug.value));
+
+const normalizeSiteUrl = (value) => {
+  if (!value) return "";
+  return String(value).trim().replace(/\/+$/, "");
+};
+
+const isLocalhostUrl = (value) => /localhost|127\.0\.0\.1|0\.0\.0\.0/i.test(value || "");
+
+const schemaBaseUrl = computed(() => {
+  const fromConfig = normalizeSiteUrl(config.public?.siteUrl || config.server?.siteUrl);
+  if (fromConfig) return fromConfig;
+  const fallback = normalizeSiteUrl(pageDomain.value);
+  if (process.env.NODE_ENV === "production" && isLocalhostUrl(fallback)) {
+    return "";
+  }
+  return fallback;
+});
+
+const schemaPageUrl = computed(() => buildAbsoluteHref(schemaBaseUrl.value, pageSlug.value));
+
+// Парсим глобальные <meta> и <link>
+const globalHeadRaw = import.meta.server ? config.server.globalHead : config.public.globalHead;
+const globalHeadSource = Array.isArray(globalHeadRaw) ? globalHeadRaw : [];
+const globalHead = {
+  link: globalHeadSource
+    .filter(tag => tag.startsWith("<link"))
+    .map(tag => Object.fromEntries(Array.from(tag.matchAll(/(\w+)=["'](.*?)["']/g)).map(([_, name, value]) => [name, value]))),
+  meta: globalHeadSource
+    .filter(tag => tag.startsWith("<meta"))
+    .map(tag => Object.fromEntries(Array.from(tag.matchAll(/(\w+)=["'](.*?)["']/g)).map(([_, name, value]) => [name, value]))),
+};
+
+const toAbsoluteUrl = (value, base) => {
+  if (!value) return undefined;
+  const raw = String(value).trim();
+  if (!raw) return undefined;
+  if (/^https?:\/\//i.test(raw) || raw.startsWith("data:")) return raw;
+  try {
+    const normalizedBase = base?.endsWith("/") ? base : `${base}/`;
+    return new URL(raw, normalizedBase).toString();
+  } catch {
+    return raw;
+  }
+};
+
+const normalizeDimension = (value) => {
+  if (value == null) return undefined;
+  const num = Number(value);
+  if (!Number.isFinite(num) || num <= 0) return undefined;
+  return String(Math.round(num));
+};
+
+const toIsoDate = (value) => {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date.toISOString();
+};
+
+const stripHtml = (value) => {
+  if (!value) return "";
+  return String(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+};
+
+const humanizeSegment = (value) => {
+  if (!value) return "";
+  const text = String(value)
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
+const normalizeSlugForPath = (value) => {
+  if (!value) return "";
+  return String(value)
+    .trim()
+    .replace(/^\/+/g, "")
+    .replace(/\/+/g, "/")
+    .replace(/\/+$/g, "");
+};
+
+const buildAbsoluteHref = (base, slugValue) => {
+  if (!base) return "";
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const normalizedSlug = normalizeSlugForPath(slugValue);
+  const relative = normalizedSlug ? `${normalizedSlug}/` : "";
+  try {
+    return normalizedSlug ? new URL(relative, normalizedBase).toString() : normalizedBase;
+  } catch (error) {
+    return normalizedSlug ? `${normalizedBase}${relative}` : normalizedBase;
+  }
+};
+
+const ogImage = computed(() => {
+  const image = data.value?.article?.introImage?.[0];
+  const src = image?.path || image?.url || image?.src;
+  return toAbsoluteUrl(src, pageDomain.value);
+});
+const ogImageWidth = computed(() => {
+  const image = data.value?.article?.introImage?.[0];
+  return normalizeDimension(image?.width ?? image?.w);
+});
+const ogImageHeight = computed(() => {
+  const image = data.value?.article?.introImage?.[0];
+  return normalizeDimension(image?.height ?? image?.h);
+});
+const siteName = computed(() => {
+  const fromConfig = config.public?.siteName || config.server?.siteName;
+  const fromData = data.value?.siteName || data.value?.site?.name || data.value?.name;
+  const fallback = pageDomain.value ? pageDomain.value.replace(/^https?:\/\//, "") : "";
+  const value = fromData || fromConfig || fallback;
+  return value ? String(value) : undefined;
+});
+const publishedTime = computed(() =>
+  toIsoDate(
+    data.value?.article?.createdAt ||
+      data.value?.createdAt ||
+      data.value?.publishedAt ||
+      pageHead.value?.publishedAt,
+  )
+);
+const modifiedTime = computed(() =>
+  toIsoDate(
+    data.value?.article?.updatedAt ||
+      data.value?.updatedAt ||
+      data.value?.modifiedAt ||
+      pageHead.value?.modifiedAt,
+  )
+);
+const twitterSite = computed(() => {
+  const fromConfig = config.public?.twitterSite || config.server?.twitterSite;
+  const fromData = data.value?.twitterSite || pageHead.value?.twitterSite;
+  return fromData || fromConfig || undefined;
+});
+
+const schemaBreadcrumbs = computed(() => {
+  if (!schemaBaseUrl.value) return [];
+  const items = [];
+  const homeName = siteName.value || "Home";
+  const homeUrl = schemaBaseUrl.value;
+  if (homeUrl) {
+    items.push({ name: homeName, item: homeUrl });
+  }
+  if (pageSlug.value) {
+    const segments = String(pageSlug.value).split("/").filter(Boolean);
+    let path = "";
+    segments.forEach((segment, index) => {
+      path += `${segment}/`;
+      const isLast = index === segments.length - 1;
+      items.push({
+        name: isLast ? (pageHead.value.title || humanizeSegment(segment)) : humanizeSegment(segment),
+        item: `${schemaBaseUrl.value}/${path}`,
+      });
+    });
+  }
+  return items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.name,
+    item: item.item,
+  }));
+});
+
+const schemaFaq = computed(() => {
+  const blocks = Array.isArray(data.value?.article?.blocks) ? data.value.article.blocks : [];
+  const faqs = [];
+  for (const block of blocks) {
+    const blockFaqs = Array.isArray(block?.faqs) ? block.faqs : [];
+    for (const faq of blockFaqs) {
+      const question = stripHtml(faq?.question);
+      const answer = stripHtml(faq?.answer);
+      if (question && answer) {
+        faqs.push({
+          "@type": "Question",
+          name: question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: answer,
+          },
+        });
+      }
+    }
+  }
+  return faqs;
+});
+
+const normalizedAlters = computed(() => {
+  const alters = Array.isArray(data.value?.alters) ? data.value.alters : [];
+  return alters
+    .map((alter) => {
+      const slugValue = normalizeSlugForPath(alter?.slug);
+      const hreflangValue = typeof alter?.hreflang === "string" ? alter.hreflang.trim() : "";
+      if (!slugValue || !hreflangValue) return null;
+      return { slug: slugValue, hreflang: hreflangValue };
+    })
+    .filter((entry) => Boolean(entry && entry.slug && entry.hreflang));
+});
+
+const buildAlternateHref = (langSlug = "") => {
+  const prefix = normalizeSlugForPath(langSlug);
+  const segments = [];
+  if (prefix) segments.push(prefix);
+  if (canonicalSlugValue.value) segments.push(canonicalSlugValue.value);
+  const combined = segments.join("/");
+  return buildAbsoluteHref(siteDomain, combined);
+};
+
+const alternateLinks = computed(() => {
+  const links = [];
+  const primaryLang = pagePrimaryLang.value || pageLang.value;
+  const defaultHref = buildAlternateHref();
+  const seen = new Set();
+
+  if (primaryLang) {
+    links.push({ rel: "alternate", hreflang: primaryLang, href: defaultHref });
+    seen.add(`${primaryLang}-${defaultHref}`);
+  }
+
+  for (const alter of normalizedAlters.value) {
+    const href = buildAlternateHref(alter.slug);
+    const key = `${alter.hreflang}-${href}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    links.push({ rel: "alternate", hreflang: alter.hreflang, href });
+  }
+
+  const xDefaultKey = `x-default-${defaultHref}`;
+  if (!seen.has(xDefaultKey)) {
+    links.push({ rel: "alternate", hreflang: "x-default", href: defaultHref });
+    seen.add(xDefaultKey);
+  }
+
+  return links;
+});
+
+const schemaAuthor = computed(() => {
+  const author = data.value?.author || data.value?.aiauthor;
+  if (!author) return null;
+  const nameCandidate = author?.name;
+  const first = nameCandidate?.first || "";
+  const last = nameCandidate?.last || "";
+  const fullName = [first, last].filter(Boolean).join(" ").trim() || nameCandidate?.full || nameCandidate?.value || "";
+  const name = String(fullName || author?.name || author?.fullName || "").trim();
+  if (!name) return null;
+  const imageCandidate = Array.isArray(author?.picture)
+    ? author.picture[0]?.path
+    : author?.picture?.path || author?.avatarMedia?.path || author?.avatar?.path;
+  const imageUrl = toAbsoluteUrl(imageCandidate, schemaBaseUrl.value || pageDomain.value);
+  const description = stripHtml(author?.bio);
+  const authorId = schemaPageUrl.value ? `${schemaPageUrl.value}#author` : undefined;
+  const node = {
+    "@type": "Person",
+    name,
+    image: imageUrl ? [imageUrl] : undefined,
+    description: description || undefined,
+  };
+  if (authorId) {
+    node["@id"] = authorId;
+  }
+  return node;
+});
+
+const schemaReviews = computed(() => {
+  const blocks = Array.isArray(data.value?.article?.blocks) ? data.value.article.blocks : [];
+  const reviews = [];
+  for (const block of blocks) {
+    const blockReviews = Array.isArray(block?.reviews) ? block.reviews : [];
+    for (const review of blockReviews) {
+      const authorName = stripHtml(
+        review?.authorBio || review?.name || review?.author?.name || review?.author,
+      );
+      const ratingValue = Number(review?.rating);
+      if (!authorName || !Number.isFinite(ratingValue) || ratingValue <= 0) {
+        continue;
+      }
+      const body = stripHtml(review?.comment || review?.content);
+      const datePublished = toIsoDate(review?.date);
+      reviews.push({
+        "@type": "Review",
+        author: { "@type": "Person", name: authorName },
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        reviewBody: body || undefined,
+        datePublished,
+      });
+    }
+  }
+  return reviews;
+});
+
+const schemaAggregateRating = computed(() => {
+  const ratings = schemaReviews.value
+    .map((review) => Number(review?.reviewRating?.ratingValue))
+    .filter((value) => Number.isFinite(value) && value > 0);
+  if (!ratings.length) return undefined;
+  const total = ratings.reduce((sum, value) => sum + value, 0);
+  const average = Number((total / ratings.length).toFixed(1));
+  return {
+    "@type": "AggregateRating",
+    ratingValue: average,
+    reviewCount: ratings.length,
+    bestRating: 5,
+    worstRating: 1,
+  };
+});
+
+const schemaNodes = computed(() => {
+  const nodes = [];
+  const isArticle = String(data.value?.type || "").toLowerCase() === "article";
+  const websiteId = schemaBaseUrl.value ? `${schemaBaseUrl.value}#website` : undefined;
+  const orgId = schemaBaseUrl.value ? `${schemaBaseUrl.value}#organization` : undefined;
+  const pageId = schemaPageUrl.value ? `${schemaPageUrl.value}#webpage` : undefined;
+  const articleId = isArticle && schemaPageUrl.value ? `${schemaPageUrl.value}#article` : undefined;
+  const siteNameValue = siteName.value;
+  const logoCandidate = data.value?.logo?.[0]?.path || data.value?.siteLogo?.[0]?.path;
+  const logoUrl = toAbsoluteUrl(logoCandidate, schemaBaseUrl.value || pageDomain.value);
+  const authorNode = schemaAuthor.value;
+
+  if (schemaBaseUrl.value && siteNameValue) {
+    nodes.push({
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: schemaBaseUrl.value,
+      name: siteNameValue,
+      inLanguage: pageLang.value,
+    });
+  }
+
+  if (schemaBaseUrl.value && siteNameValue) {
+    nodes.push({
+      "@type": "Organization",
+      "@id": orgId,
+      url: schemaBaseUrl.value,
+      name: siteNameValue,
+      logo: logoUrl ? { "@type": "ImageObject", url: logoUrl } : undefined,
+    });
+  }
+
+  if (schemaPageUrl.value) {
+    const webPageNode = {
+      "@type": "WebPage",
+      "@id": pageId,
+      url: schemaPageUrl.value,
+      name: pageHead.value.title || siteNameValue || "Website",
+      description: pageHead.value.description || undefined,
+      isPartOf: websiteId ? { "@id": websiteId } : undefined,
+      inLanguage: pageLang.value,
+      author: !isArticle && authorNode
+        ? authorNode["@id"]
+          ? { "@id": authorNode["@id"] }
+          : { "@type": "Person", name: authorNode.name }
+        : undefined,
+      aggregateRating: !isArticle ? schemaAggregateRating.value : undefined,
+    };
+    nodes.push(webPageNode);
+  }
+
+  if (schemaBreadcrumbs.value.length) {
+    nodes.push({
+      "@type": "BreadcrumbList",
+      itemListElement: schemaBreadcrumbs.value,
+    });
+  }
+
+  const articleHeadline = pageHead.value.title || data.value?.article?.H1;
+  if (isArticle && articleHeadline) {
+    nodes.push({
+      "@type": "Article",
+      "@id": articleId,
+      headline: articleHeadline,
+      description: pageHead.value.description || undefined,
+      image: ogImage.value ? [toAbsoluteUrl(ogImage.value, schemaBaseUrl.value || pageDomain.value)] : undefined,
+      datePublished: publishedTime.value,
+      dateModified: modifiedTime.value,
+      inLanguage: pageLang.value,
+      mainEntityOfPage: pageId ? { "@id": pageId } : undefined,
+      publisher: orgId ? { "@id": orgId } : undefined,
+      author: authorNode
+        ? authorNode["@id"]
+          ? { "@id": authorNode["@id"] }
+          : { "@type": "Person", name: authorNode.name }
+        : undefined,
+      aggregateRating: isArticle ? schemaAggregateRating.value : undefined,
+    });
+  }
+
+  if (schemaFaq.value.length) {
+    nodes.push({
+      "@type": "FAQPage",
+      mainEntity: schemaFaq.value,
+    });
+  }
+
+  if (authorNode) {
+    nodes.push(authorNode);
+  }
+
+  if (schemaReviews.value.length) {
+    const reviewedId = isArticle ? articleId : pageId;
+    const updatedReviews = schemaReviews.value.map((review) =>
+      reviewedId
+        ? { ...review, itemReviewed: { "@id": reviewedId } }
+        : review,
+    );
+    nodes.push(...updatedReviews);
+  }
+
+  return nodes.filter(Boolean);
+});
+
+// === Универсальный headMeta с поддержкой robots.metaTags ===
+const headMeta = computed(() => {
+  const baseMeta = [
+    { name: "description", content: toContentString(pageHead.value.description) },
+    { name: "keywords", content: toContentString(pageHead.value.keywords) },
+    { property: "og:title", content: toContentString(pageHead.value.title) },
+    { property: "og:description", content: toContentString(pageHead.value.description) },
+    { property: "og:image", content: toContentString(ogImage.value) },
+    { property: "og:image:width", content: toContentString(ogImageWidth.value) },
+    { property: "og:image:height", content: toContentString(ogImageHeight.value) },
+    { property: "og:url", content: toContentString(pageUrl.value) },
+    { property: "og:type", content: "article" },
+    { property: "og:site_name", content: toContentString(siteName.value) },
+    { property: "og:locale", content: toContentString(pageLang.value) },
+    { property: "article:published_time", content: toContentString(publishedTime.value) },
+    { property: "article:modified_time", content: toContentString(modifiedTime.value) },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: toContentString(pageHead.value.title) },
+    { name: "twitter:description", content: toContentString(pageHead.value.description) },
+    { name: "twitter:image", content: toContentString(ogImage.value) },
+    { name: "twitter:site", content: toContentString(twitterSite.value) },
+  ];
+
+  const metaArray = Array.isArray(pageHead.value.meta) ? pageHead.value.meta : [];
+  const globalMeta = globalHead.meta || [];
+  const manifestMetaEntries = manifestHead.value.meta || [];
+  const robotsMetaTags = Array.isArray(data.value?.robots?.metaTags) ? data.value.robots.metaTags : [];
+
+  let robotsMeta = metaArray.find(m => m.key === "robots" && m.type === "name")
+    || robotsMetaTags.find(m => m.name === "robots");
+
+  const metaWithoutRobots = metaArray.filter(m => m.key !== "robots");
+  const robotsOtherMeta = robotsMetaTags.filter(m => m.name !== "robots");
+
+  const manifestNames = manifestMetaEntries
+    .map(entry => entry?.name)
+    .filter(Boolean);
+
+  const usedNames = new Set([
+    ...metaWithoutRobots.map(m => m.key),
+    ...manifestNames,
+    ...(globalMeta.map(m => m.name).filter(Boolean)),
+  ]);
+  const robotsOtherMetaFiltered = robotsOtherMeta.filter(m => !usedNames.has(m.name));
+
+  const pageMetaEntries = metaWithoutRobots
+    .map(m => {
+      const attrName = m?.type === "property" ? "property" : m?.type === "httpEquiv" ? "httpEquiv" : "name";
+      const attrValue = m?.key != null ? String(m.key) : "";
+      if (!attrName || !attrValue) return null;
+      const entry = { [attrName]: attrValue };
+      const content = toContentString(m?.content);
+      if (content !== undefined) entry.content = content;
+      return entry;
+    })
+    .filter(Boolean);
+
+  const robotsEntry = robotsMeta
+    ? [{
+        name: "robots",
+        content: toContentString(robotsMeta.content ?? robotsMeta.value),
+      }].filter(item => item.content !== undefined)
+    : [];
+
+  const robotsOtherEntries = robotsOtherMetaFiltered
+    .map(m => {
+      const name = m?.name != null ? String(m.name) : "";
+      if (!name) return null;
+      const content = toContentString(m?.content ?? m?.value);
+      const entry = { name };
+      if (content !== undefined) entry.content = content;
+      return entry;
+    })
+    .filter(Boolean);
+
+  const combined = [
+    ...baseMeta,
+    ...pageMetaEntries,
+    ...robotsEntry,
+    ...robotsOtherEntries,
+    ...manifestMetaEntries,
+    ...globalMeta,
+  ].filter(Boolean);
+
+  return dedupeMeta(combined);
+});
+
+
+const headLinks = computed(() => {
+  const manifestLinks = manifestHead.value.link || [];
+  const combined = [
+    { rel: "canonical", href: canonicalHref.value },
+    ...alternateLinks.value,
+    ...manifestLinks,
+    ...(globalHead.link || []),
+  ].filter(Boolean);
+
+  return dedupeLinks(combined);
+});
+
+
+const headScripts = computed(() => [
+  ...(Array.isArray(data.value?.pixel) && data.value.pixel.length > 0 ? [{
+    innerHTML: `
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      ${data.value.pixel.map(pixelId => `fbq('init', '${pixelId}');`).join('\n')}
+      fbq('track', 'PageView');
+    `,
+    type: "text/javascript"
+  }] : []),
+  ...(Array.isArray(data.value?.gtm) ? data.value.gtm.map((gtmId, index) => ({
+    key: `gtm-script-${index}`,
+    innerHTML: `
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','${gtmId}');
+    `
+  })) : [])
+]);
+
+const headNoScripts = computed(() => [
+  ...(Array.isArray(data.value?.pixel) ? data.value.pixel.map(pixelId => ({
+    innerHTML: `
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1"/>
+    `
+  })) : []),
+  ...(Array.isArray(data.value?.gtm) ? data.value.gtm.map((gtmId, index) => ({
+    key: `gtm-noscript-${index}`,
+    innerHTML: `
+      <iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    `
+  })) : [])
+]);
+
+useHead({
+  htmlAttrs: { lang: pageLang.value },
+  title: pageHead.value.title || "Website",
+  meta: headMeta.value,
+  link: headLinks.value,
+  script: headScripts.value,
+  noscript: headNoScripts.value,
+});
+
+useSchemaOrg(schemaNodes);
+
+if (data.value?.lang) {
+  locale.value = data.value.lang;
+}
+
+// --- Site-level custom code blocks ---
+const headBlocks = computed(() => Array.isArray(data.value?.headCodeBlocks) ? data.value.headCodeBlocks : []);
+const bodyBlocks = computed(() => Array.isArray(data.value?.bodyCodeBlocks) ? data.value.bodyCodeBlocks : []);
+
+const extractCode = (html) => {
+  if (!html) return "";
+  let s = String(html);
+  const m = s.match(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/i);
+  if (m) s = m[1];
+  if (/&lt;|&gt;|&amp;|&quot;|&#039;/.test(s)) {
+    s = s
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'");
+  }
+  return s;
+};
+
+const toHeadScripts = computed(() => headBlocks.value
+  .filter(b => b?.type === 'js')
+  .map((b, i) => ({ key: `head-js-${i}` , innerHTML: extractCode(b.content), type: 'text/javascript' }))
+);
+const toHeadStyles = computed(() => headBlocks.value
+  .filter(b => b?.type === 'css')
+  .map((b, i) => ({ key: `head-css-${i}`, children: extractCode(b.content) }))
+);
+const toHeadLdJson = computed(() => headBlocks.value
+  .filter(b => b?.type === 'blocks')
+  .map((b, i) => ({ key: `head-ld-${i}`, type: 'application/ld+json', children: extractCode(b.content) }))
+);
+
+// Support head custom HTML blocks: extract meta/link/script/style/noscript
+const headHtmlBlocks = computed(() => headBlocks.value
+  .filter(b => b?.type === 'html')
+  .map(b => extractCode(b.content))
+);
+
+const parseAttrs = (str = '') => {
+  const attrs = {};
+  const re = /(\w[\w:-]*)\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/g;
+  let m;
+  while ((m = re.exec(str))) {
+    const key = m[1];
+    const val = m[3] ?? m[4] ?? m[5] ?? '';
+    attrs[key] = val;
+  }
+  return attrs;
+};
+
+const toHeadHtmlScripts = computed(() => {
+  const res = [];
+  const re = /<script([^>]*)>([\s\S]*?)<\/script>/gi;
+  for (const html of headHtmlBlocks.value) {
+    let m;
+    while ((m = re.exec(html))) {
+      const attrs = parseAttrs(m[1] || '');
+      const children = (m[2] || '').trim();
+      const entry = { ...attrs };
+      if (children) entry.innerHTML = children;
+      res.push(entry);
+    }
+  }
+  return res;
+});
+
+const toHeadHtmlStyles = computed(() => {
+  const res = [];
+  const re = /<style([^>]*)>([\s\S]*?)<\/style>/gi;
+  for (const html of headHtmlBlocks.value) {
+    let m;
+    while ((m = re.exec(html))) {
+      const attrs = parseAttrs(m[1] || '');
+      const children = (m[2] || '').trim();
+      res.push({ ...attrs, children });
+    }
+  }
+  return res;
+});
+
+const toHeadHtmlMeta = computed(() => {
+  const res = [];
+  const re = /<meta([^>]*)>/gi;
+  for (const html of headHtmlBlocks.value) {
+    let m;
+    while ((m = re.exec(html))) {
+      const attrs = parseAttrs(m[1] || '');
+      if (Object.keys(attrs).length) res.push(attrs);
+    }
+  }
+  return res;
+});
+
+const toHeadHtmlLinks = computed(() => {
+  const res = [];
+  const re = /<link([^>]*)>/gi;
+  for (const html of headHtmlBlocks.value) {
+    let m;
+    while ((m = re.exec(html))) {
+      const attrs = parseAttrs(m[1] || '');
+      if (Object.keys(attrs).length) res.push(attrs);
+    }
+  }
+  return res;
+});
+
+const toHeadHtmlNoScripts = computed(() => {
+  const res = [];
+  const re = /<noscript>([\s\S]*?)<\/noscript>/gi;
+  for (const html of headHtmlBlocks.value) {
+    let m;
+    while ((m = re.exec(html))) {
+      const children = (m[1] || '').trim();
+      if (children) res.push({ innerHTML: children });
+    }
+  }
+  return res;
+});
+
+// Merge additional head assets from code blocks
+useHead({
+  meta: toHeadHtmlMeta.value,
+  link: toHeadHtmlLinks.value,
+  script: [...toHeadScripts.value, ...toHeadLdJson.value, ...toHeadHtmlScripts.value],
+  style: [...toHeadStyles.value, ...toHeadHtmlStyles.value],
+  noscript: toHeadHtmlNoScripts.value,
+});
+
+// Body code prepared for SSR rendering
+const bodyHtmlCodes = computed(() => bodyBlocks.value
+  .filter(b => ['html', 'text', 'universal'].includes(b?.type))
+  .map(b => extractCode(b.content))
+);
+const bodyJsCodes = computed(() => bodyBlocks.value
+  .filter(b => b?.type === 'js')
+  .map(b => extractCode(b.content))
+);
+
+// SSR редирект
+if (data.value?.redirect?.to && import.meta.server) {
+  const target = data.value.redirect.to;
+  const isExternal = /^https?:\/\//i.test(target);
+  await navigateTo(target, {
+    redirectCode: data.value.redirect.statusCode || 301,
+    external: isExternal,
+  });
+}
+</script>
