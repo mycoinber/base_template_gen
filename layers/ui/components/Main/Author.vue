@@ -117,9 +117,9 @@ const formattedDate = computed(() => {
   const raw = props.data?.createdAt || props.data?.updatedAt;
   const date = new Date(raw);
   if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("ru-RU", {
+  return date.toLocaleDateString("en-CA", {
     day: "2-digit",
-    month: "2-digit",
+    month: "short",
     year: "numeric",
   });
 });
@@ -127,11 +127,11 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-  <section>
+  <section class="my-10 max-[541px]:my-6">
     <div class="container">
-      <div class="flex flex-col p-4 rounded-[0.625rem] bg-background-02" style="border: 1px solid var(--border);">
-        <div class="flex gap-4 w-full max-[541px]:gap-2">
-          <div class="block w-20 min-w-20 h-20 min-h-20 bg-background-02 rounded-full overflow-hidden" style="border: 1px solid var(--border);">
+      <div class="panel-card flex flex-col gap-4 p-5 max-[541px]:p-4">
+        <div class="flex w-full gap-4 max-[541px]:gap-3">
+          <div class="block h-20 min-h-20 w-20 min-w-20 overflow-hidden rounded-full border border-border bg-background-02">
             <NuxtImg
               :src="authorImageSrc"
               :alt="authorPictures?.[0]?.alt || authorName || 'author'"
@@ -141,24 +141,24 @@ const formattedDate = computed(() => {
             />
           </div>
 
-          <div class="flex flex-col gap-2 w-full">
-            <div class="flex justify-between gap-8 w-full max-[541px]:flex-col-reverse max-[541px]:justify-start max-[541px]:gap-0">
-              <h3 class="m-0 p-0">
+          <div class="flex w-full flex-col gap-2">
+            <div class="flex w-full justify-between gap-8 max-[541px]:flex-col-reverse max-[541px]:justify-start max-[541px]:gap-1">
+              <h3 class="m-0 p-0 text-color-white">
                 {{ authorName }}
               </h3>
 
-              <time v-if="formattedDate" :datetime="publishedDateISO" class="text-sm text-right opacity-50">{{
+              <time v-if="formattedDate" :datetime="publishedDateISO" class="text-xs uppercase tracking-[0.08em] text-right text-color-muted">{{
                 formattedDate
               }}</time>
             </div>
 
             <div class="flex flex-col gap-2">
-              <span v-if="authorRole" class="font-font-02 opacity-50">{{ authorRole }}</span>
+              <span v-if="authorRole" class="eagle-pill w-fit">{{ authorRole }}</span>
             </div>
           </div>
         </div>
 
-        <p v-if="authorBio" class="text-sm opacity-50">{{ authorBio }}</p>
+        <p v-if="authorBio" class="text-sm text-color-muted">{{ authorBio }}</p>
       </div>
     </div>
   </section>

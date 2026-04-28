@@ -68,23 +68,23 @@ const isImageLeft = computed(() => {
 </script>
 
 <template>
-  <section :id="block._id" class="my-8 max-[541px]:my-4">
+  <section :id="block._id" class="my-10 max-[541px]:my-6">
     <div class="container">
       <div
         :class="[
-          'flex flex-nowrap gap-8 w-full max-[541px]:flex-col',
+          'flex w-full flex-nowrap gap-6 max-[541px]:flex-col',
           { 'flex-row-reverse': isImageLeft },
         ]"
       >
         <div
-          class="flex-1 overflow-hidden [&_a]:text-color-01 max-[541px]:[&_table]:block max-[541px]:[&_table]:w-full max-[541px]:[&_table]:max-w-full max-[541px]:[&_table]:overflow-x-auto max-[541px]:[&_table]:pb-2 max-[541px]:[&_table]:pr-2"
+          class="panel-card rich-content flex-1 overflow-hidden p-5 max-[541px]:p-4 [&_a]:text-color-02 max-[541px]:[&_table]:block max-[541px]:[&_table]:w-full max-[541px]:[&_table]:max-w-full max-[541px]:[&_table]:overflow-x-auto max-[541px]:[&_table]:pb-2 max-[541px]:[&_table]:pr-2"
         >
-          <h2 v-if="block.headline" class="mb-4">{{ block.headline }}</h2>
+          <h2 v-if="block.headline" class="mb-4 text-left">{{ block.headline }}</h2>
           <div v-html="contentHtml" />
         </div>
 
         <div v-if="imageSrc" class="flex-1">
-          <div class="w-full aspect-square rounded-[0.625rem] overflow-hidden">
+          <div class="panel-card w-full aspect-square overflow-hidden">
             <img
               :src="imageSrc"
               :alt="image?.alt || block.headline || 'section image'"

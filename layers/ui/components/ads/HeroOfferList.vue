@@ -68,18 +68,18 @@ const cards = computed(() =>
 </script>
 
 <template>
-  <section v-if="cards.length" class="my-8 max-[541px]:my-4">
+  <section v-if="cards.length" class="my-10 max-[541px]:my-6">
     <div class="container">
       <div
-        class="grid grid-cols-5 gap-3 max-[541px]:flex max-[541px]:overflow-x-auto max-[541px]:pb-2 max-[541px]:-mx-4 max-[541px]:px-4"
+        class="grid grid-cols-5 gap-3 max-[541px]:flex max-[541px]:-mx-4 max-[541px]:overflow-x-auto max-[541px]:px-4 max-[541px]:pb-2"
       >
         <div
           v-for="card in cards"
           :key="card.key"
-          class="relative w-full overflow-hidden rounded-[0.625rem] border border-border bg-background-02 p-2 aspect-[4/3] max-[541px]:min-w-[66.666%] max-[541px]:basis-[66.666%] max-[541px]:flex-none"
+          class="panel-card relative aspect-[4/3] w-full overflow-hidden p-2 max-[541px]:min-w-[66.666%] max-[541px]:basis-[66.666%] max-[541px]:flex-none"
         >
           <div
-            class="relative flex h-full w-full flex-col justify-end overflow-hidden rounded-[0.5rem]"
+            class="relative flex h-full w-full flex-col justify-end overflow-hidden rounded-[0.65rem]"
           >
             <img
               v-if="card.imageSrc"
@@ -90,17 +90,17 @@ const cards = computed(() =>
             />
             <div
               v-if="card.imageSrc"
-              class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10"
+              class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/48 to-black/12"
             ></div>
             <div class="relative z-10 flex w-full flex-col justify-end gap-3 p-3 text-color-white">
-              <h3 class="font-font-02 text-base font-semibold leading-tight text-center">
+              <h3 class="font-font-02 text-[1rem] font-semibold leading-tight text-center">
                 {{ card.title }}
               </h3>
             <NuxtLink
               :href="card.link"
               target="_blank"
               rel="noopener noreferrer nofollow"
-              class="font-font-02 inline-flex w-full items-center justify-center rounded-[0.4rem] bg-color-01 px-3 py-2.5 text-xs font-medium uppercase text-color-white no-underline transition-[filter] duration-300 hover:brightness-[0.7]"
+              class="eagle-cta font-font-01 inline-flex w-full items-center justify-center px-3 py-2.5 text-[0.68rem] no-underline"
             >
               {{ card.buttonText }}
             </NuxtLink>

@@ -1,3 +1,5 @@
 <template>
-    <div class="w-12 h-12 border-[0.313rem] border-white/30 border-t-color-01 rounded-full animate-spin"></div>
+    <div class="relative h-12 w-12 animate-spin rounded-full border-[0.28rem] border-border border-t-color-03">
+      <span class="absolute inset-1 rounded-full border border-color-02"></span>
+    </div>
 </template>

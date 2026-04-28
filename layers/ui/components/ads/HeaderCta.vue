@@ -38,7 +38,7 @@ const headerOfferEnabled = computed(() =>
     :href="headerOfferLink"
     target="_blank"
     rel="noopener noreferrer nofollow"
-    class="font-font-02 inline-flex w-full items-center justify-center rounded-[0.4rem] bg-color-01 px-6 py-4 text-base font-medium uppercase text-color-white no-underline transition-[filter] duration-300 hover:brightness-[0.7]"
+    class="eagle-cta font-font-01 inline-flex h-full w-full items-center justify-center px-4 py-3 text-xs tracking-[0.08em] no-underline"
   >
     {{ headerPrimaryLabel }}
   </NuxtLink>

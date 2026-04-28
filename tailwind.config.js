@@ -13,15 +13,20 @@ export default {
       colors: {
         'background-01': 'var(--background-01)',
         'background-02': 'var(--background-02)',
+        'background-03': 'var(--background-03)',
         'color-white': 'var(--color-white)',
         'color-black': 'var(--color-black)',
         'color-01': 'var(--color-01)',
         'color-02': 'var(--color-02)',
         'color-03': 'var(--color-03)',
+        'color-muted': 'var(--color-muted)',
+        'color-soft': 'var(--color-soft)',
         'border': 'var(--border)',
+        'border-strong': 'var(--border-strong)',
       },
       borderColor: {
         'border': 'var(--border)',
+        'border-strong': 'var(--border-strong)',
       },
       fontFamily: {
         'font-01': ['var(--font-01)', 'sans-serif'],

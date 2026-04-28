@@ -45,7 +45,7 @@ const heroImageSrc = computed(() => {
 <template>
   <section
     :id="block._id"
-    class="relative z-[2] mb-16 max-[541px]:h-fit"
+    class="relative z-[2] mb-12 max-[541px]:mb-8 max-[541px]:h-fit"
     :class="{ 'w-full h-[65rem]': page.offer }"
   >
     <div class="container">
@@ -68,7 +68,7 @@ const heroImageSrc = computed(() => {
         />
       </div>
     </div>
-    <div class="absolute top-0 left-0 w-full h-[20%] -z-[1] bg-gradient-to-b from-transparent via-black/68 to-transparent pointer-events-none"></div>
+    <div class="absolute top-0 left-0 w-full h-[20%] -z-[1] bg-gradient-to-b from-transparent via-black/48 to-transparent pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-full h-[70%] -z-[1] bg-gradient-to-b from-transparent to-background-01 pointer-events-none"></div>
   </section>
 </template>

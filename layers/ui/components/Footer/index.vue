@@ -1,6 +1,6 @@
 <script setup>
 import { useRequestURL } from "#app";
-import { useI18n } from 'vue-i18n';
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
@@ -15,21 +15,22 @@ const sharedLogo = useState("siteLogo", () => []);
 const langPrefix = useState("siteLangPrefix", () => "");
 
 const navigationLinks = computed(() => {
-  return props.data?.pages
+  const pages = Array.isArray(props.data?.pages) ? props.data.pages : [];
+  return pages
     .map((page) => {
-      let title = page.title || '';
+      let title = page.title || "";
       if (title.match(/[-–:|]/)) {
         title = title.split(/[-–:|]/)[0].trim();
       }
 
       return {
-        name: page.homePage ? t('home') : title,
+        name: page.homePage ? t("home") : title,
         slug: page.homePage ? "" : page.slug,
       };
     })
     .sort((a, b) => {
-      if (a.name === t('home')) return -1;
-      if (b.name === t('home')) return 1;
+      if (a.name === t("home")) return -1;
+      if (b.name === t("home")) return 1;
       return 0;
     });
 });
@@ -50,35 +51,35 @@ const resolvedLogo = computed(() => {
 });
 
 const siteTitle = computed(() => {
-  return props.data?.siteName || props.data?.name || props.data?.head?.title || 'site';
+  return props.data?.siteName || props.data?.name || props.data?.head?.title || "site";
 });
 
 const normalizeRoutePath = (value) => {
-  if (!value) return ''
+  if (!value) return "";
   return String(value)
-    .replace(/^\/+/, '')
-    .replace(/\/+$/, '')
-    .replace(/\/{2,}/g, '/')
-}
+    .replace(/^\/+/, "")
+    .replace(/\/+$/, "")
+    .replace(/\/{2,}/g, "/");
+};
 
 const resolveLink = (slug) => {
-  const prefix = normalizeRoutePath(langPrefix.value || '')
-  const destination = normalizeRoutePath(slug || '')
-  const segments = []
-  if (prefix) segments.push(prefix)
-  if (destination) segments.push(destination)
-  const path = segments.join('/')
-  return path ? `/${path}` : '/'
-}
+  const prefix = normalizeRoutePath(langPrefix.value || "");
+  const destination = normalizeRoutePath(slug || "");
+  const segments = [];
+  if (prefix) segments.push(prefix);
+  if (destination) segments.push(destination);
+  const path = segments.join("/");
+  return path ? `/${path}` : "/";
+};
 </script>
 
 <template>
-  <footer>
+  <footer class="mt-16 max-[541px]:mt-10">
     <div class="container">
-      <div class="flex flex-col gap-8 py-12 pb-4 max-[541px]:items-start max-[541px]:py-4">
-        <div class="flex items-center justify-between gap-20 max-[541px]:flex-col max-[541px]:items-start max-[541px]:gap-4">
-          <div class="h-16 rounded overflow-hidden max-[541px]:h-10 max-[541px]:mb-4">
-            <NuxtLink :to="resolveLink('')" class="flex h-full items-center w-fit">
+      <div class="panel-card overflow-hidden px-6 py-8 max-[541px]:px-4 max-[541px]:py-6">
+        <div class="mb-8 flex items-start justify-between gap-8 max-[541px]:mb-6 max-[541px]:flex-col max-[541px]:items-start">
+          <div class="flex flex-col gap-3">
+            <NuxtLink :to="resolveLink('')" class="flex h-14 items-center max-[541px]:h-10">
               <NuxtImg
                 v-if="resolvedLogo"
                 :src="resolvedLogo?.path || ''"
@@ -86,23 +87,30 @@ const resolveLink = (slug) => {
                 class="h-full w-auto object-contain"
               />
             </NuxtLink>
+            <span class="text-[0.78rem] uppercase tracking-[0.1em] text-color-muted">Grey Eagle Canada Hub</span>
           </div>
 
           <nav>
-            <ul class="flex gap-4 list-none m-0 p-0 max-[541px]:flex-col max-[541px]:items-start max-[541px]:gap-[0.675rem]">
+            <ul class="m-0 flex list-none flex-wrap justify-end gap-x-5 gap-y-2 p-0 max-[541px]:justify-start">
               <li v-for="(link, index) in navigationLinks" :key="index" class="m-0">
-              <NuxtLink :to="resolveLink(link.slug)" external class="block text-base font-medium leading-[120%] transition-colors duration-300 text-color-white text-center max-[541px]:text-left max-[541px]:text-sm hover:text-color-01">{{ link.name }}</NuxtLink>
+                <NuxtLink
+                  :to="resolveLink(link.slug)"
+                  class="font-font-01 text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-color-soft no-underline transition-colors duration-300 hover:text-color-03"
+                >{{ link.name }}</NuxtLink>
               </li>
             </ul>
           </nav>
 
-          <div class="max-[541px]:hidden w-[10rem] h-[3.25rem]">
+          <div class="w-[10.5rem] h-[3rem] max-[541px]:w-full max-[541px]:h-auto">
             <AdsFooterCta :offers="data?.offers" />
           </div>
         </div>
 
-        <div class="w-full text-center opacity-50 text-base max-[541px]:text-sm">
-          &#169; Copyright 2025. {{ siteDomain }}
+        <div class="flex items-center justify-between gap-4 border-t border-border pt-4 text-[0.78rem] uppercase tracking-[0.07em] text-color-muted max-[541px]:flex-col max-[541px]:items-start">
+          <span>
+            &#169; 2026 {{ siteDomain }}
+          </span>
+          <span>Play responsibly. 21+ only.</span>
         </div>
       </div>
     </div>

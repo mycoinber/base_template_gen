@@ -16,6 +16,14 @@ Important for local development:
 - Run dev server from project root (`base_template_layer`), not from `layers/`.
 - Use `pnpm dev` (it cleans accidental `layers/.nuxt` and `layers/node_modules` caches before start).
 
+## Redesign Toolkit
+
+- Template contract docs: `docs/template-dna.md`
+- Redesign prompt template: `docs/redesign-prompt-template.md`
+- Reusable skill package: `tools/skills/nuxt-layer-redesign`
+
+Use the skill in Codex with: `$nuxt-layer-redesign`.
+
 ## Setup
 
 Make sure to install dependencies:

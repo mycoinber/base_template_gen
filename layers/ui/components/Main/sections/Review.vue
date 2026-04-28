@@ -66,21 +66,20 @@ const formatDate = (raw) => {
 </script>
 
 <template>
-  <section :id="block._id" v-if="block?.reviews?.length" class="my-8 max-[541px]:my-4">
+  <section :id="block._id" v-if="block?.reviews?.length" class="my-10 max-[541px]:my-6">
     <div class="container">
       <div class="flex flex-col gap-4 overflow-hidden max-[541px]:gap-0">
-        <h2>{{ block?.headline || block?.H2 }}</h2>
+        <h2 class="text-left">{{ block?.headline || block?.H2 }}</h2>
         <div class="grid grid-cols-4 gap-8 max-[541px]:flex max-[541px]:gap-4 max-[541px]:min-w-full max-[541px]:w-full max-[541px]:overflow-y-hidden max-[541px]:overflow-x-scroll max-[541px]:py-4">
           <div
             v-for="(review, index) in block?.reviews"
             :key="review._id || index"
-            class="flex flex-col gap-2 p-4 rounded-[0.625rem] bg-background-02 w-full max-[541px]:w-80 max-[541px]:min-w-80"
-            style="border: 1px solid var(--border);"
+            class="panel-card flex w-full flex-col gap-2 p-4 max-[541px]:w-80 max-[541px]:min-w-80"
             itemscope
             itemtype="http://schema.org/Review"
           >
             <div class="flex gap-4">
-              <div class="w-20 h-20 rounded-full overflow-hidden" style="border: 1px solid var(--border);">
+              <div class="h-20 w-20 overflow-hidden rounded-full border border-border">
                 <NuxtImg
                   :src="resolveAvatar(review)"
                   alt="author"
@@ -91,23 +90,23 @@ const formatDate = (raw) => {
               </div>
 
               <div class="flex flex-col flex-1">
-                <span v-if="formatDate(review.date)" class="text-sm opacity-50 w-full text-right" itemprop="datePublished">
+                <span v-if="formatDate(review.date)" class="w-full text-right text-xs uppercase tracking-[0.07em] text-color-muted" itemprop="datePublished">
                   {{ formatDate(review.date) }}
                 </span>
 
-                <span class="font-font-02 text-[1.35rem] font-bold" itemprop="author">
+                <span class="font-font-02 text-[1.2rem] font-semibold text-color-white" itemprop="author">
                   {{ resolveAuthorName(review, index) }}
                 </span>
               </div>
             </div>
 
-            <div class="flex items-center gap-1" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+            <div class="flex items-center gap-1 text-color-03" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
               <Icon name="material-symbols:star-rounded" style="color: #ffb800" />
-              <span class="text-sm" itemprop="ratingValue"> {{ review.rating }}/5 </span>
+              <span class="text-sm font-semibold" itemprop="ratingValue"> {{ review.rating }}/5 </span>
             </div>
 
             <div
-              class="text-sm opacity-50"
+              class="rich-content text-sm text-color-muted"
               itemprop="reviewBody"
               v-html="review.comment || review.content"
             ></div>

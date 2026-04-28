@@ -15,7 +15,8 @@ const sharedLogo = useState('siteLogo', () => [])
 const langPrefix = useState('siteLangPrefix', () => '')
 
 const navigationLinks = computed(() => {
-  return props.data?.pages
+  const pages = Array.isArray(props.data?.pages) ? props.data.pages : []
+  return pages
     .map((page) => {
       let title = page.title || ''
       if (title.match(/[-–:|]/)) {
@@ -41,6 +42,10 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
+const closeMenu = () => {
+  isMenuOpen.value = false
+}
+
 const updateScroll = () => {
   isScrolled.value = window.scrollY > 8
 }
@@ -53,8 +58,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', updateScroll)
 })
-
-// Header CTA mirrors ads/hero logic (use offers.hero data)
 
 const resolvedLogo = computed(() => {
   const fromState = Array.isArray(sharedLogo.value) ? sharedLogo.value : []
@@ -71,8 +74,6 @@ const resolvedLogo = computed(() => {
 const siteTitle = computed(() => {
   return props.data?.siteName || props.data?.name || props.data?.head?.title || 'site'
 })
-
-// Header CTA logic moved to components/ads/HeaderCta.vue
 
 const normalizeRoutePath = (value) => {
   if (!value) return ''
@@ -94,11 +95,17 @@ const resolveLink = (slug) => {
 </script>
 
 <template>
-  <header class="sticky top-0 left-0 z-20 w-full bg-background-01">
+  <header
+    class="sticky top-0 left-0 z-30 w-full transition-all duration-300"
+    :class="isScrolled ? 'pt-2' : 'pt-4'"
+  >
     <div class="container">
-      <div class="flex items-center justify-between gap-4 py-4">
-        <div class="h-16 rounded overflow-hidden max-[541px]:h-10">
-          <NuxtLink :to="resolveLink('')" class="flex h-full items-center w-fit">
+      <div
+        class="glass-shell relative flex items-center justify-between gap-4 rounded-[1.1rem] px-4 py-3 max-[541px]:rounded-[0.9rem]"
+        :class="isScrolled ? 'shadow-[0_1rem_2.2rem_rgba(2,7,16,.48)]' : 'shadow-[0_.75rem_1.8rem_rgba(2,7,16,.32)]'"
+      >
+        <div class="flex items-center gap-3">
+          <NuxtLink :to="resolveLink('')" class="flex h-12 items-center max-[541px]:h-10" @click="closeMenu">
             <NuxtImg
               v-if="resolvedLogo"
               :src="resolvedLogo?.path || ''"
@@ -106,58 +113,65 @@ const resolveLink = (slug) => {
               class="h-full w-auto object-contain"
             />
           </NuxtLink>
+
+          <span class="eagle-pill max-[541px]:hidden">Canada 21+</span>
         </div>
 
-        <nav class="max-w-[60%] max-[541px]:hidden">
-          <ul class="flex items-center gap-8 list-none m-0 overflow-hidden">
-            <li v-for="(link, index) in navigationLinks" :key="index">
+        <nav class="max-w-[58%] max-[541px]:hidden">
+          <ul class="m-0 flex list-none items-center gap-6 overflow-hidden p-0">
+            <li v-for="(link, index) in navigationLinks" :key="index" class="m-0">
               <NuxtLink
                 :to="resolveLink(link.slug)"
-                external
-                class="block text-base font-medium text-color-white transition-colors duration-300 text-center hover:text-color-01 router-link-active:text-color-01"
-                >{{ link.name }}</NuxtLink
-              >
+                class="font-font-01 block text-[0.88rem] font-semibold uppercase tracking-[0.08em] text-color-soft transition-colors duration-300 hover:text-color-03"
+              >{{ link.name }}</NuxtLink>
             </li>
           </ul>
         </nav>
 
-        <div class="max-[541px]:hidden w-[10rem] h-[3.25rem]">
+        <div class="max-[541px]:hidden w-[10.5rem] h-[3rem]">
           <AdsHeaderCta :offers="data?.offers" />
         </div>
 
-        <div class="relative hidden max-[541px]:flex w-6 h-6 cursor-pointer" @click="toggleMenu">
-          <span
-            :class="[
-              'absolute left-0 top-1.5 h-0.5 w-full bg-white transition-all duration-300 rounded-sm origin-center',
-              { 'top-1/2 -translate-y-1/2 rotate-45': isMenuOpen },
-            ]"
-          ></span>
-          <span
-            :class="[
-              'absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-full bg-white transition-all duration-300 rounded-sm',
-              { 'opacity-0': isMenuOpen },
-            ]"
-          ></span>
-          <span
-            :class="[
-              'absolute left-0 bottom-1.5 h-0.5 w-full bg-white transition-all duration-300 rounded-sm origin-center',
-              { 'bottom-auto top-1/2 -translate-y-1/2 -rotate-45': isMenuOpen },
-            ]"
-          ></span>
-        </div>
-
-        <nav
-          v-if="isMenuOpen"
-          class="absolute top-full left-0 w-full h-screen bg-background-01 pt-20 px-4 opacity-100 translate-y-0 transition-all duration-300 ease-in-out flex flex-col max-[541px]:flex"
+        <button
+          type="button"
+          class="relative hidden h-9 w-9 items-center justify-center rounded-[0.55rem] border border-border bg-background-02 max-[541px]:flex"
+          @click="toggleMenu"
         >
-          <ul class="list-none m-0 p-0">
-            <li v-for="(link, i) in navigationLinks" :key="i" class="mb-4">
-              <NuxtLink :to="resolveLink(link.slug)" class="text-white text-base font-medium">{{
-                link.name
-              }}</NuxtLink>
+          <span
+            :class="[
+              'absolute h-0.5 w-5 bg-color-white transition-all duration-300',
+              isMenuOpen ? 'rotate-45' : '-translate-y-1.5',
+            ]"
+          ></span>
+          <span
+            :class="[
+              'absolute h-0.5 w-5 bg-color-white transition-all duration-300',
+              isMenuOpen ? 'opacity-0' : 'opacity-100',
+            ]"
+          ></span>
+          <span
+            :class="[
+              'absolute h-0.5 w-5 bg-color-white transition-all duration-300',
+              isMenuOpen ? '-rotate-45' : 'translate-y-1.5',
+            ]"
+          ></span>
+        </button>
+
+        <div
+          v-if="isMenuOpen"
+          class="glass-shell absolute left-0 top-[calc(100%+0.6rem)] w-full rounded-[0.95rem] border border-border p-4 max-[541px]:block"
+        >
+          <ul class="m-0 mb-4 list-none p-0">
+            <li v-for="(link, i) in navigationLinks" :key="i" class="mb-2 last:mb-0">
+              <NuxtLink
+                :to="resolveLink(link.slug)"
+                class="font-font-01 block rounded-[0.6rem] px-3 py-2 text-[0.9rem] uppercase tracking-[0.07em] text-color-soft no-underline hover:bg-background-03 hover:text-color-03"
+                @click="closeMenu"
+              >{{ link.name }}</NuxtLink>
             </li>
           </ul>
-        </nav>
+          <AdsHeaderCta :offers="data?.offers" />
+        </div>
       </div>
     </div>
   </header>

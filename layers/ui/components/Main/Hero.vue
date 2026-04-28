@@ -39,13 +39,13 @@ const heroBackground = computed(() => {
 </script>
 
 <template>
-  <div v-if="offer" class="grid grid-cols-[75%_25%] gap-8 max-[541px]:flex max-[541px]:flex-col">
-    <div class="flex flex-col gap-4 p-4 border border-border rounded-[0.625rem] bg-background-02">
+  <div v-if="offer" class="grid grid-cols-[74%_26%] gap-6 max-[541px]:flex max-[541px]:flex-col">
+    <div class="panel-card flex flex-col gap-4 p-5 max-[541px]:p-4">
       <div class="flex items-center justify-between gap-4 w-full">
-        <span class="font-font-02 text-2xl font-semibold uppercase whitespace-nowrap max-w-full text-ellipsis overflow-hidden m-0 p-0 max-[541px]:text-xl max-[541px]:mx-auto max-[541px]:text-center">{{ offer.label }}</span>
+        <span class="font-font-02 m-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap p-0 text-[1.9rem] font-semibold uppercase text-color-white max-[541px]:mx-auto max-[541px]:text-xl max-[541px]:text-center">{{ offer.label }}</span>
 
         <div class="flex items-center gap-4 max-[541px]:hidden">
-          <span class="text-sm opacity-50">{{ offer.title }}</span>
+          <span class="text-sm text-color-muted">{{ offer.title }}</span>
 
           <GeneralButton :data="{
             link: offer.link || '',
@@ -56,7 +56,7 @@ const heroBackground = computed(() => {
         </div>
       </div>
 
-      <div class="flex items-center justify-center w-full h-[40rem] relative rounded-[0.625rem] overflow-hidden max-[541px]:min-h-[24rem] max-[541px]:h-auto max-[541px]:py-6">
+      <div class="relative flex h-[40rem] w-full items-center justify-center overflow-hidden rounded-[0.95rem] border border-border max-[541px]:h-auto max-[541px]:min-h-[24rem] max-[541px]:py-6">
         <div class="absolute top-0 left-0 w-full h-full">
           <img
             v-if="heroBackground"
@@ -65,20 +65,21 @@ const heroBackground = computed(() => {
             loading="lazy"
           />
         </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/12 via-black/45 to-black/65"></div>
 
         <GeneralButtonThree :data="{
           link: offer.link || '',
           title: offer.button2 || t('play'),
           target: '_blank',
           rel: 'noopener noreferrer',
-        }" class="w-1/4" />
+        }" class="relative z-10 w-1/4 max-[541px]:w-3/4" />
       </div>
     </div>
 
-    <div class="flex flex-col gap-[2.35rem]">
+    <div class="flex flex-col gap-4">
       <template v-for="section in heroSections" :key="section._id">
-      <div class="flex flex-col w-full p-4 relative border border-border rounded-[0.625rem] bg-background-02">
-        <div class="absolute -left-4 -top-4 w-14 h-14 rounded-full border border-border overflow-hidden max-[541px]:-left-2 max-[541px]:-top-2 max-[541px]:w-12 max-[541px]:h-12">
+      <div class="panel-card relative flex w-full flex-col p-4">
+        <div class="absolute -left-4 -top-4 h-14 w-14 overflow-hidden rounded-full border border-border max-[541px]:-left-2 max-[541px]:-top-2 max-[541px]:h-12 max-[541px]:w-12">
           <NuxtImg
             v-if="section.images?.[0]?.path"
             :src="section.images[0].path"
@@ -95,10 +96,10 @@ const heroBackground = computed(() => {
           />
         </div>
 
-        <span class="font-font-02 text-lg font-medium uppercase text-center whitespace-nowrap max-w-full text-ellipsis overflow-hidden pl-8 mb-4">{{ section.headline }}</span>
+        <span class="font-font-02 mb-3 max-w-full overflow-hidden whitespace-nowrap pl-8 text-center text-base font-medium uppercase text-ellipsis text-color-white">{{ section.headline }}</span>
 
-        <div class="flex flex-col items-center gap-4">
-          <span class="font-font-02 text-lg font-medium leading-[120%] text-color-03 text-center uppercase pt-4 border-t border-border">{{ section.headline }}</span>
+        <div class="flex flex-col items-center gap-3">
+          <span class="font-font-02 border-t border-border pt-3 text-center text-[0.86rem] font-medium uppercase tracking-[0.08em] text-color-03">{{ section.headline }}</span>
 
           <GeneralButton :data="{
             link: section.link || '/go',
@@ -107,12 +108,12 @@ const heroBackground = computed(() => {
             rel: 'noopener noreferrer',
           }" class="w-full" />
 
-          <div class="flex items-center gap-4">
-            <span class="text-sm opacity-50 pr-2 border-r-2 border-border text-center last:border-r-0">18+</span>
+          <div class="flex items-center gap-3">
+            <span class="border-r border-border pr-2 text-[0.7rem] uppercase tracking-[0.08em] text-color-muted text-center last:border-r-0">18+</span>
 
-            <span class="text-sm opacity-50 pr-2 border-r-2 border-border text-center last:border-r-0">{{ $t('terms_apply') }}</span>
+            <span class="border-r border-border pr-2 text-[0.7rem] uppercase tracking-[0.08em] text-color-muted text-center last:border-r-0">{{ $t('terms_apply') }}</span>
 
-            <span class="text-sm opacity-50 pr-2 border-r-2 border-border text-center last:border-r-0">{{ $t('play_responsibility') }}</span>
+            <span class="border-r border-border pr-2 text-[0.7rem] uppercase tracking-[0.08em] text-color-muted text-center last:border-r-0">{{ $t('play_responsibility') }}</span>
           </div>
         </div>
       </div>

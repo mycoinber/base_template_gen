@@ -9,8 +9,6 @@ const props = defineProps({
   },
 });
 
-const config = useRuntimeConfig();
-
 const blocks = computed(() =>
   Array.isArray(props.data.article?.blocks) ? props.data.article.blocks : [],
 );
@@ -110,27 +108,31 @@ if (import.meta.server) {
 </script>
 
 <template>
-  <div v-if="!isLoaded" class="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-background-01 z-[9999]">
+  <div v-if="!isLoaded" class="fixed top-0 left-0 z-[9999] flex h-screen w-full items-center justify-center bg-background-01 backdrop-blur-sm">
     <MainLoader />
   </div>
 
   <section
     v-if="heroOffer"
-    class="relative w-full mb-8 overflow-hidden rounded-[0.625rem] border border-border"
+    class="reveal-up relative mb-10 w-full overflow-hidden max-[541px]:mb-6"
   >
     <AdsHero :offer="heroOffer" />
   </section>
   <section
     v-else-if="heroMedia"
-    class="relative w-full mb-8 overflow-hidden rounded-[0.625rem] border border-border h-[40rem] max-[541px]:min-h-[24rem]"
+    class="reveal-up relative mb-10 w-full overflow-hidden max-[541px]:mb-6"
   >
-    <img
-      :src="heroMediaSrc"
-      :alt="heroAlt"
-      class="absolute inset-0 w-full h-full object-cover"
-      loading="lazy"
-    />
-    <div class="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-transparent via-black/50 to-background-01 pointer-events-none"></div>
+    <div class="container">
+      <div class="panel-card relative h-[40rem] overflow-hidden max-[541px]:min-h-[24rem]">
+        <img
+          :src="heroMediaSrc"
+          :alt="heroAlt"
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div class="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-transparent via-black/55 to-background-01 pointer-events-none"></div>
+      </div>
+    </div>
   </section>
 
   <AdsHeroOfferList :offers="heroOfferList" />

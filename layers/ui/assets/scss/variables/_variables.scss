@@ -1,19 +1,26 @@
 :root {
-    /* Цвета фона */
-    --background-01: #18181d;
-    --background-02: #2d3345;
+  /* Core surfaces */
+  --background-01: #070a11;
+  --background-02: #121828;
+  --background-03: #1b2439;
 
-    /* Основные цвета */
-    --color-white: #ffffff;
-    --color-black: #000000;
-    --color-01: #e00840;
-    --color-02: #2b8ef9;
-    --color-03: #ffe500;
+  /* Text and accents */
+  --color-white: #f2f6ff;
+  --color-black: #030507;
+  --color-01: #d72b4e;
+  --color-02: #58bcff;
+  --color-03: #f8cf78;
 
-    /* Границы */
-    --border: #545969;
+  /* Supporting tokens */
+  --color-muted: #a6b4ce;
+  --color-soft: #cad5ea;
+  --border: #2b3852;
+  --border-strong: #40587c;
+  --surface-glass: rgba(18, 24, 40, 0.84);
+  --surface-card: linear-gradient(155deg, rgba(28, 37, 58, 0.92), rgba(12, 18, 30, 0.98));
+  --shadow-eagle: 0 1.2rem 3rem rgba(2, 6, 14, 0.5);
 
-    /* Шрифты */
-    --font-01: "Inter", sans-serif;
-    --font-02: "Oswald", sans-serif;
+  /* Fonts */
+  --font-01: "Manrope", sans-serif;
+  --font-02: "Cinzel", serif;
 }

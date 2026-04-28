@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nuxt Layer Redesign"
+  short_description: "Preserve Nuxt layer contracts in redesign workflows."
+  default_prompt: "Use $nuxt-layer-redesign to take a site theme and execute end-to-end redesign while preserving data, SSR, routing, and SEO contracts."

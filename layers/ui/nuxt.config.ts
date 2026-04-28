@@ -36,7 +36,8 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
       style: [
         {
-          children: "html,body{background:#18181d;color:#fff;min-height:100%;}",
+          children:
+            "html,body{background:#070a11;color:#f2f6ff;min-height:100%;}body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% -10%,rgba(250,214,112,.15),transparent 40%),radial-gradient(circle at 85% 10%,rgba(88,188,255,.12),transparent 35%);z-index:-1;}",
         },
       ],
       link: [
@@ -65,8 +66,8 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      Oswald: [400, 500, 700],
-      Inter: [400, 500, 700],
+      Cinzel: [500, 600, 700],
+      Manrope: [400, 500, 600, 700],
     },
     display: "swap",
     preconnect: true,

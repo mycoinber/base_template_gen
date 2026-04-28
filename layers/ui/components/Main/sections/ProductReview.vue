@@ -78,7 +78,7 @@ const isImageLeft = computed(() => {
 </script>
 
 <template>
-  <section :id="block._id" class="my-8 max-[541px]:my-4">
+  <section :id="block._id" class="my-10 max-[541px]:my-6">
     <div class="container">
       <div
         :class="[
@@ -86,18 +86,18 @@ const isImageLeft = computed(() => {
           { 'product-review-head--reverse': isImageLeft },
         ]"
       >
-        <div class="product-review-intro">
+        <div class="product-review-intro panel-card">
           <h2 class="mb-4">{{ sectionHeadline }}</h2>
 
           <div
             v-if="introHtml"
-            class="product-review-intro-content"
+            class="product-review-intro-content rich-content"
             v-html="introHtml"
           />
         </div>
 
         <div v-if="sectionImageSrc" class="product-review-media">
-          <div class="w-full aspect-square rounded-[0.625rem] overflow-hidden">
+          <div class="panel-card w-full aspect-square overflow-hidden">
             <img
               :src="sectionImageSrc"
               :alt="sectionImage?.alt || sectionHeadline"
@@ -110,7 +110,7 @@ const isImageLeft = computed(() => {
 
       <div
         v-if="bodyHtml"
-        class="product-review-content mt-4"
+        class="product-review-content panel-card mt-4 p-5 max-[541px]:p-4"
         v-html="bodyHtml"
       />
     </div>
@@ -131,6 +131,7 @@ const isImageLeft = computed(() => {
 .product-review-intro {
   flex: 1 1 auto;
   min-width: 0;
+  padding: 1.25rem;
 }
 
 .product-review-media {
@@ -156,8 +157,8 @@ const isImageLeft = computed(() => {
 }
 
 .product-review-content {
-  --pr-card: color-mix(in srgb, var(--background-02) 92%, #111827);
-  --pr-border: color-mix(in srgb, var(--border) 82%, #374151);
+  --pr-card: color-mix(in srgb, var(--background-02) 86%, #0f1728);
+  --pr-border: color-mix(in srgb, var(--border) 86%, #24344f);
   --pr-accent: var(--color-01);
   --pr-success: #10b981;
   --pr-warning: #f59e0b;

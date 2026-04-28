@@ -40,7 +40,7 @@ const imageSrc = computed(() => {
 
 <template>
   <div
-    class="relative flex w-full min-h-[40rem] items-center justify-center overflow-hidden rounded-[0.625rem] border border-border text-color-white max-[541px]:min-h-[24rem]"
+    class="relative flex w-full min-h-[41rem] items-center justify-center overflow-hidden rounded-[1rem] border border-border text-color-white max-[541px]:min-h-[24rem]"
   >
     <div class="absolute inset-0">
       <img
@@ -52,17 +52,19 @@ const imageSrc = computed(() => {
       />
     </div>
     <div
-      class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/60 to-background-01"
+      class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/62 to-background-01"
     ></div>
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(248,207,120,.24),transparent_35%)]"></div>
     <div class="relative z-10 w-full">
       <div class="container">
-        <div class="flex flex-col items-center justify-center gap-6 py-8 text-center">
-          <div class="flex flex-col gap-2">
-            <span class="font-font-02 text-6xl font-semibold leading-tight max-[541px]:text-xl">
-              {{ title }}ы
+        <div class="mx-auto flex max-w-[50rem] flex-col items-center justify-center gap-6 py-10 text-center max-[541px]:py-8">
+          <div class="flex flex-col gap-3">
+            <span class="eagle-pill mx-auto">Top Ranked In Canada</span>
+            <span class="font-font-02 text-5xl font-semibold leading-tight max-[541px]:text-2xl">
+              {{ title }}
             </span>
 
-            <p v-if="description" class="text-base leading-relaxed opacity-80">
+            <p v-if="description" class="mx-auto max-w-[52ch] text-base leading-relaxed text-color-soft">
               {{ description }}
             </p>
           </div>
@@ -72,7 +74,7 @@ const imageSrc = computed(() => {
             :href="link"
             target="_blank"
             rel="noopener noreferrer nofollow"
-            class="font-font-02 inline-flex w-full items-center justify-center rounded-[0.4rem] bg-color-01 px-6 py-4 text-base font-medium uppercase text-color-white no-underline transition-[filter] duration-300 hover:brightness-[0.7] max-w-80"
+            class="eagle-cta font-font-01 inline-flex w-full max-w-80 items-center justify-center px-6 py-4 text-sm no-underline"
           >
             {{ buttonText }}
           </NuxtLink>
