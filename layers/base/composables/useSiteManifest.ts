@@ -11,8 +11,24 @@ export async function useSiteManifest() {
   );
 
   if (import.meta.server) {
+    let requestOrigin = '';
+    let userAgent = '';
+    try {
+      requestOrigin = useRequestURL().origin;
+      userAgent = useRequestHeaders(['user-agent'])['user-agent'] || '';
+    } catch {
+      requestOrigin = '';
+      userAgent = '';
+    }
+
     if (manifestState.value == null) {
       manifestState.value = await readManifestFromDisk();
+      if (manifestState.value == null) {
+        manifestState.value = await readManifestFromCurrentOrigin({
+          origin: requestOrigin,
+          userAgent,
+        });
+      }
     }
     return { data: manifestState };
   }
@@ -64,6 +80,44 @@ async function readManifestFromDisk(): Promise<WebsiteManifestPayload | null> {
   } catch {
     return null;
   }
+}
+
+async function readManifestFromCurrentOrigin(params: {
+  origin?: string | null;
+  userAgent?: string | null;
+}): Promise<WebsiteManifestPayload | null> {
+  if (!import.meta.server) {
+    return null;
+  }
+
+  const origin = params.origin ? String(params.origin).trim() : '';
+  if (!origin) {
+    return null;
+  }
+
+  const userAgent = params.userAgent ? String(params.userAgent).trim() : '';
+
+  try {
+    const manifestUrl = new URL(`/${MANIFEST_FILE_NAME}`, origin).toString();
+    const payload = await $fetch<unknown>(manifestUrl, {
+      headers: {
+        accept: 'application/json',
+        ...(userAgent ? { 'user-agent': userAgent } : {}),
+      },
+    });
+
+    if (!isManifestPayload(payload)) {
+      return null;
+    }
+
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+function isManifestPayload(value: unknown): value is WebsiteManifestPayload {
+  return Boolean(value) && typeof value === 'object';
 }
 
 function normalizeRawValue(value: unknown): string | null {
