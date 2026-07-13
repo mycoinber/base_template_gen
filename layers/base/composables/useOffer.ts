@@ -13,7 +13,7 @@ export function useOffer(offerId: MaybeRef<string | null | undefined>) {
   const fetchOffer = async () => {
     const id = unref(offerId)
     if (!id) return null
-    const response = await $axios.get(`/public/offer/${id}`)
+    const response = await $axios.get(`/offers/${id}`)
     return response.data
   }
 

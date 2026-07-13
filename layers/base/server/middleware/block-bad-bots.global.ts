@@ -7,6 +7,13 @@ import {
 } from "h3";
 
 export default defineEventHandler((event) => {
+  const path = (event.path || event.node?.req?.url || "").split("?")[0].toLowerCase();
+  if (
+    path === "/robots.txt" ||
+    path.startsWith("/__fastgen/") ||
+    (path.includes("sitemap") && path.endsWith(".xml"))
+  ) return;
+
   const ua = (getHeader(event, "user-agent") || "").toString();
   // (необязательно) оставим "белый список" системных ботов/превью,
   // чтобы не ломать шаринг/проверки статуса и т.п.

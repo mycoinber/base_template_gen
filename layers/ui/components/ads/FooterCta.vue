@@ -17,7 +17,10 @@ const footerOffer = computed(() => {
 
 const footerOfferData = computed(() => footerOffer.value?.data || storedFooterOfferData.value || {});
 
-const footerOfferLink = computed(() => footerOfferData.value?.link || "");
+const footerOfferId = computed(() =>
+  footerOffer.value?.offer || footerOfferData.value?.id || footerOfferData.value?._id || "",
+);
+const { openOffer } = useOfferNavigation(footerOfferId);
 
 const footerPrimaryLabel = computed(() => {
   const data = footerOfferData.value || {};
@@ -28,18 +31,17 @@ const footerPrimaryLabel = computed(() => {
 });
 
 const footerOfferEnabled = computed(() =>
-  Boolean(footerOfferLink.value && footerPrimaryLabel.value),
+  Boolean(footerOfferId.value && footerPrimaryLabel.value),
 );
 </script>
 
 <template>
-  <NuxtLink
+  <button
     v-if="footerOfferEnabled"
-    :href="footerOfferLink"
-    target="_blank"
-    rel="noopener noreferrer nofollow"
+    type="button"
     class="eagle-cta font-font-01 inline-flex h-full w-full items-center justify-center px-4 py-3 text-xs tracking-[0.08em] no-underline"
+    @click="openOffer()"
   >
     {{ footerPrimaryLabel }}
-  </NuxtLink>
+  </button>
 </template>

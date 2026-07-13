@@ -40,9 +40,9 @@ const resolveTitle = (offer) => {
   return data.title || data.label || ''
 }
 
-const resolveLink = (offer) => {
+const resolveOfferId = (offer) => {
   const data = offer?.data || {}
-  return data.link || '#'
+  return offer?.offer || data.id || data._id || ''
 }
 
 const resolveButtonText = (offer) => {
@@ -59,12 +59,14 @@ const resolveButtonText = (offer) => {
 const cards = computed(() =>
   normalizedOffers.value.map((offer, index) => ({
     key: offer?.offer || offer?.id || offer?._id || `offer-${index}`,
+    offerId: resolveOfferId(offer),
     imageSrc: resolveImageSrc(offer),
     title: resolveTitle(offer),
-    link: resolveLink(offer),
     buttonText: resolveButtonText(offer),
   }))
 )
+
+const { openOffer } = useOfferNavigation()
 </script>
 
 <template>
@@ -96,14 +98,14 @@ const cards = computed(() =>
               <h3 class="font-font-02 text-[1rem] font-semibold leading-tight text-center">
                 {{ card.title }}
               </h3>
-            <NuxtLink
-              :href="card.link"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
+            <button
+              v-if="card.offerId"
+              type="button"
               class="eagle-cta font-font-01 inline-flex w-full items-center justify-center px-3 py-2.5 text-[0.68rem] no-underline"
+              @click="openOffer(card.offerId)"
             >
               {{ card.buttonText }}
-            </NuxtLink>
+            </button>
             </div>
           </div>
         </div>
