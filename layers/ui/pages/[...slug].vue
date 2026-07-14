@@ -65,20 +65,134 @@ const manifestHead = computed(() => manifestToHead(siteManifestRaw.value));
 
 const pageHead = computed(() => data.value?.head || {});
 const pagePrimaryLang = computed(() => data.value?.primaryLang || null);
-const pageLang = computed(() => data.value?.lang || pagePrimaryLang.value || "en");
+const pageLang = computed(() => resolveActivePageLang());
 const pageDomain = computed(() => data.value?.domain || siteDomain);
 const isHomePage = computed(() => Number(data.value?.homePage) === 1);
-const pageSlug = computed(() => (
-  isHomePage.value ? "" : normalizeSlugForPath(data.value?.slug || slug || "")
-));
+const hasCanonicalPageSlug = computed(() => Boolean(normalizeSlugForPath(data.value?.canonicalSlug)));
+const isVersionHomePage = computed(() => Boolean(data.value?.localePrefix) && !hasCanonicalPageSlug.value);
+const isResolvedHomePage = computed(() => isHomePage.value || isVersionHomePage.value);
+const isRootHomePage = computed(() => isResolvedHomePage.value && !data.value?.localePrefix);
+const currentSlugValue = computed(() => {
+  const prefix = normalizeSlugForPath(data.value?.localePrefix);
+  if (isResolvedHomePage.value) {
+    return prefix;
+  }
+  return normalizeSlugForPath(data.value?.fullSlug || data.value?.slug || slug || "");
+});
+const pageSlug = computed(() => currentSlugValue.value);
+const originalSlugValue = computed(() => {
+  if (isResolvedHomePage.value) return "";
+
+  const canonical = normalizeSlugForPath(data.value?.canonicalSlug);
+  if (canonical) return canonical;
+
+  const current = normalizeSlugForPath(data.value?.fullSlug || data.value?.slug || slug || "");
+  const prefix = normalizeSlugForPath(data.value?.localePrefix);
+  if (prefix && (current === prefix || current.startsWith(`${prefix}/`))) {
+    return current.slice(prefix.length).replace(/^\/+/g, "");
+  }
+  return isRootHomePage.value ? "" : current;
+});
 const canonicalSlugValue = computed(() => (
-  isHomePage.value
+  isRootHomePage.value
     ? ""
-    : normalizeSlugForPath(data.value?.canonicalSlug || data.value?.slug || slug || "")
+    : originalSlugValue.value
 ));
+const canonicalPathValue = computed(() => currentSlugValue.value);
 const pageUrl = computed(() => buildAbsoluteHref(pageDomain.value, pageSlug.value));
 
-const canonicalHref = computed(() => buildAbsoluteHref(pageDomain.value, pageSlug.value));
+const getEntryId = (entry) => {
+  const raw = entry?.id || entry?._id;
+  if (raw && typeof raw === "object") {
+    return raw.id || raw._id || raw.$oid || "";
+  }
+  return raw ? String(raw) : "";
+};
+
+const versionSeoEntries = computed(() => {
+  const versions = Array.isArray(data.value?.versions) ? data.value.versions : [];
+  return versions
+    .map((version) => {
+      const slugValue = normalizeSlugForPath(version?.slug);
+      const hreflangValue = typeof version?.hreflang === "string" ? version.hreflang.trim() : "";
+      const canonicalUrlValue = typeof version?.canonicalUrl === "string" ? version.canonicalUrl.trim() : "";
+      const hreflangUrlValue = typeof version?.hreflangUrl === "string" ? version.hreflangUrl.trim() : "";
+      const ampUrlValue = typeof version?.ampUrl === "string" ? version.ampUrl.trim() : "";
+      if (!slugValue && !hreflangValue) return null;
+      return {
+        id: getEntryId(version),
+        slug: slugValue,
+        hreflang: hreflangValue,
+        canonicalUrl: canonicalUrlValue,
+        hreflangUrl: hreflangUrlValue,
+        ampUrl: ampUrlValue,
+      };
+    })
+    .filter(Boolean);
+});
+
+const findVersionSeoFallback = (entry = {}) => {
+  const entryId = getEntryId(entry);
+  const entrySlug = normalizeSlugForPath(entry?.slug);
+  const entryHreflang = typeof entry?.hreflang === "string" ? entry.hreflang.trim().toLowerCase() : "";
+
+  return versionSeoEntries.value.find((version) => {
+    if (entryId && version.id && entryId === version.id) return true;
+    if (entrySlug && version.slug && entrySlug === version.slug) return true;
+    return Boolean(entryHreflang && version.hreflang && entryHreflang === version.hreflang.toLowerCase());
+  }) || null;
+};
+
+const activeVersionSeo = computed(() => {
+  const current = currentSlugValue.value;
+  const prefix = normalizeSlugForPath(data.value?.localePrefix);
+  if (!current && !prefix) return null;
+
+  return versionSeoEntries.value.find((version) => {
+    if (prefix && version.slug === prefix) return true;
+    return Boolean(version.slug && current && (current === version.slug || current.startsWith(`${version.slug}/`)));
+  }) || null;
+});
+
+const canonicalHref = computed(() => {
+  const explicitCanonical = typeof pageHead.value?.canonicalUrl === "string"
+    ? pageHead.value.canonicalUrl.trim()
+    : typeof pageHead.value?.canonical === "string"
+      ? pageHead.value.canonical.trim()
+      : "";
+  const versionCanonical = typeof activeVersionSeo.value?.canonicalUrl === "string"
+    ? activeVersionSeo.value.canonicalUrl.trim()
+    : "";
+  return explicitCanonical || versionCanonical || buildAbsoluteHref(pageDomain.value, canonicalPathValue.value);
+});
+
+const ampHref = computed(() => {
+  const explicitAmp = typeof pageHead.value?.ampUrl === "string"
+    ? pageHead.value.ampUrl.trim()
+    : typeof pageHead.value?.amp === "string"
+      ? pageHead.value.amp.trim()
+      : "";
+  const versionAmp = typeof activeVersionSeo.value?.ampUrl === "string"
+    ? activeVersionSeo.value.ampUrl.trim()
+    : "";
+  const rawAmp = explicitAmp || versionAmp;
+  if (!rawAmp) return "";
+  return /^https?:\/\//i.test(rawAmp)
+    ? rawAmp
+    : buildAbsoluteHref(pageDomain.value, rawAmp);
+});
+
+const originalHreflangHref = computed(() => {
+  const explicitHref = typeof pageHead.value?.hreflangUrl === "string"
+    ? pageHead.value.hreflangUrl.trim()
+    : typeof pageHead.value?.hreflangHref === "string"
+      ? pageHead.value.hreflangHref.trim()
+      : "";
+  if (!explicitHref) return "";
+  return /^https?:\/\//i.test(explicitHref)
+    ? explicitHref
+    : buildAbsoluteHref(siteDomain, explicitHref);
+});
 
 const normalizeSiteUrl = (value) => {
   if (!value) return "";
@@ -271,16 +385,78 @@ const normalizedAlters = computed(() => {
   const alters = Array.isArray(data.value?.alters) ? data.value.alters : [];
   return alters
     .map((alter) => {
+      const versionSeo = findVersionSeoFallback(alter);
       const slugValue = normalizeSlugForPath(alter?.slug);
+      const rawFullSlugValue = normalizeSlugForPath(alter?.fullSlug);
+      const fullSlugValue = isResolvedHomePage.value ? slugValue : rawFullSlugValue;
       const hreflangValue = typeof alter?.hreflang === "string" ? alter.hreflang.trim() : "";
+      const hreflangUrlValue = typeof alter?.hreflangUrl === "string" && alter.hreflangUrl.trim()
+        ? alter.hreflangUrl.trim()
+        : versionSeo?.hreflangUrl || "";
+      const canonicalUrlValue = typeof alter?.canonicalUrl === "string" && alter.canonicalUrl.trim()
+        ? alter.canonicalUrl.trim()
+        : versionSeo?.canonicalUrl || "";
+      const ampUrlValue = typeof alter?.ampUrl === "string" && alter.ampUrl.trim()
+        ? alter.ampUrl.trim()
+        : versionSeo?.ampUrl || "";
       if (!slugValue || !hreflangValue) return null;
-      return { slug: slugValue, hreflang: hreflangValue };
+      return {
+        slug: slugValue,
+        fullSlug: fullSlugValue,
+        hreflang: hreflangValue,
+        canonicalUrl: canonicalUrlValue,
+        hreflangUrl: hreflangUrlValue,
+        ampUrl: ampUrlValue,
+        isDefault: Boolean(alter?.isDefault),
+      };
     })
     .filter((entry) => Boolean(entry && entry.slug && entry.hreflang));
 });
 
-const buildAlternateHref = (langSlug = "") => {
-  const prefix = normalizeSlugForPath(langSlug);
+function resolveActiveAlternate() {
+  const current = currentSlugValue.value;
+  const prefix = normalizeSlugForPath(data.value?.localePrefix);
+  if (!current && !prefix) return null;
+
+  return normalizedAlters.value.find((alter) => {
+    if (alter.fullSlug && alter.fullSlug === current) return true;
+    if (prefix && alter.slug === prefix) return true;
+    return Boolean(alter.slug && current && (current === alter.slug || current.startsWith(`${alter.slug}/`)));
+  }) || null;
+}
+
+function resolveActivePageLang() {
+  const activeAlter = resolveActiveAlternate();
+  if (activeAlter?.hreflang) return activeAlter.hreflang;
+
+  const explicitLang = typeof data.value?.lang === "string" ? data.value.lang.trim() : "";
+  return explicitLang || pagePrimaryLang.value || "en";
+}
+
+const buildAlternateHref = (alterOrSlug = "") => {
+  if (!alterOrSlug && originalHreflangHref.value) {
+    return originalHreflangHref.value;
+  }
+
+  const explicitHref = typeof alterOrSlug === "object" && alterOrSlug
+    ? (typeof alterOrSlug.hreflangUrl === "string" ? alterOrSlug.hreflangUrl.trim() : "")
+    : "";
+  if (explicitHref) {
+    return /^https?:\/\//i.test(explicitHref)
+      ? explicitHref
+      : buildAbsoluteHref(siteDomain, normalizeSlugForPath(explicitHref));
+  }
+
+  const fullSlug = typeof alterOrSlug === "object" && alterOrSlug
+    ? normalizeSlugForPath(alterOrSlug.fullSlug)
+    : "";
+  if (fullSlug) {
+    return buildAbsoluteHref(siteDomain, fullSlug);
+  }
+
+  const prefix = typeof alterOrSlug === "object" && alterOrSlug
+    ? normalizeSlugForPath(alterOrSlug.slug)
+    : normalizeSlugForPath(alterOrSlug);
   const segments = [];
   if (prefix) segments.push(prefix);
   if (canonicalSlugValue.value) segments.push(canonicalSlugValue.value);
@@ -295,21 +471,23 @@ const alternateLinks = computed(() => {
   const seen = new Set();
 
   if (primaryLang) {
-    links.push({ rel: "alternate", hreflang: primaryLang, href: defaultHref });
+    links.push({ key: `alternate-${primaryLang}`, rel: "alternate", hreflang: primaryLang, href: defaultHref });
     seen.add(`${primaryLang}-${defaultHref}`);
   }
 
   for (const alter of normalizedAlters.value) {
-    const href = buildAlternateHref(alter.slug);
+    const href = buildAlternateHref(alter);
     const key = `${alter.hreflang}-${href}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    links.push({ rel: "alternate", hreflang: alter.hreflang, href });
+    links.push({ key: `alternate-${alter.hreflang}`, rel: "alternate", hreflang: alter.hreflang, href });
   }
 
-  const xDefaultKey = `x-default-${defaultHref}`;
+  const defaultAlter = normalizedAlters.value.find((alter) => alter.isDefault && alter.hreflang);
+  const xDefaultHref = defaultAlter ? buildAlternateHref(defaultAlter) : defaultHref;
+  const xDefaultKey = `x-default-${xDefaultHref}`;
   if (!seen.has(xDefaultKey)) {
-    links.push({ rel: "alternate", hreflang: "x-default", href: defaultHref });
+    links.push({ key: "alternate-x-default", rel: "alternate", hreflang: "x-default", href: xDefaultHref });
     seen.add(xDefaultKey);
   }
 
@@ -599,7 +777,8 @@ const headMeta = computed(() => {
 const headLinks = computed(() => {
   const manifestLinks = manifestHead.value.link || [];
   const combined = [
-    { rel: "canonical", href: canonicalHref.value },
+    { key: "canonical", rel: "canonical", href: canonicalHref.value },
+    ampHref.value ? { key: "amphtml", rel: "amphtml", href: ampHref.value } : null,
     ...alternateLinks.value,
     ...manifestLinks,
     ...(globalHead.link || []),

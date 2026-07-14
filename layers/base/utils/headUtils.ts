@@ -35,7 +35,8 @@ export const dedupeLinks = (items: Array<Record<string, string | undefined>>) =>
     if (!item) continue;
     const rel = typeof item.rel === 'string' ? item.rel : '';
     const href = typeof item.href === 'string' ? item.href : '';
-    const key = rel ? `${rel}|${href}` : href;
+    const hreflang = typeof item.hreflang === 'string' ? item.hreflang : '';
+    const key = rel ? `${rel}|${href}|${hreflang}` : href;
 
     if (key) {
       if (map.has(key)) continue;

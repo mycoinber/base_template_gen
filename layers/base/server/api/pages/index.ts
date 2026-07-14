@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   setResponseHeader(
     event,
     "Cache-Control",
-    "s-maxage=3600, stale-while-revalidate=600"
+    "no-cache, max-age=0, must-revalidate"
   );
 
   const { siteId, backendBase } = resolveSiteRuntime(event);
