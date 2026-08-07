@@ -44,13 +44,17 @@ const resolveHomeVersionFallback = async (
   const versionAmpUrl = typeof version?.ampUrl === "string"
     ? version.ampUrl.trim()
     : "";
+  const versionHreflangUrl = !version?.hreflang && typeof version?.hreflangUrl === "string"
+    ? version.hreflangUrl.trim()
+    : "";
 
   return {
     ...legacyPayload,
-    head: versionCanonicalUrl || versionAmpUrl
+    head: versionCanonicalUrl || versionAmpUrl || versionHreflangUrl
       ? {
           ...(legacyPayload?.head || {}),
           ...(versionCanonicalUrl ? { canonicalUrl: versionCanonicalUrl } : {}),
+          ...(versionHreflangUrl ? { hreflangUrl: versionHreflangUrl } : {}),
           ...(versionAmpUrl ? { ampUrl: versionAmpUrl } : {}),
         }
       : legacyPayload?.head,

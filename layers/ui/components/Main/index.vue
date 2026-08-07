@@ -13,6 +13,21 @@ const blocks = computed(() =>
   Array.isArray(props.data.article?.blocks) ? props.data.article.blocks : [],
 );
 
+const monolithHtml = computed(() =>
+  typeof props.data?.article?.monolithHtml === 'string' ? props.data.article.monolithHtml.trim() : '',
+);
+
+const monolithReviews = computed(() =>
+  Array.isArray(props.data?.article?.reviews) ? props.data.article.reviews : [],
+);
+
+const monolithReviewBlock = computed(() => ({
+  _id: 'article-reviews',
+  type: 'review',
+  headline: props.data?.article?.reviewsTitle || '',
+  reviews: monolithReviews.value,
+}));
+
 const introBlock = computed(() =>
   blocks.value.find(
     (block) => typeof block?.type === 'string' && block.type.toLowerCase() === 'intro',
@@ -139,9 +154,25 @@ if (import.meta.server) {
 
   <MainTitle v-if="data.article?.H1" :data="data" />
 
-  <MainTableOfContent v-if="blocks.length" :data="data" />
+  <MainTableOfContent v-if="blocks.length && !monolithHtml" :data="data" />
+
+  <section v-if="monolithHtml" class="my-10 max-[541px]:my-6">
+    <div class="container">
+      <div
+        class="rich-content max-w-none overflow-hidden max-[541px]:[&_table]:block max-[541px]:[&_table]:w-full max-[541px]:[&_table]:max-w-full max-[541px]:[&_table]:overflow-x-auto max-[541px]:[&_table]:pb-2 max-[541px]:[&_table]:pr-2"
+        v-html="monolithHtml"
+      ></div>
+    </div>
+  </section>
 
   <component
+    v-if="monolithReviews.length"
+    :is="sectionComponents.review"
+    :block="monolithReviewBlock"
+  />
+
+  <component
+    v-if="!monolithHtml"
     v-for="block in blocks"
     :key="block._id"
     :is="resolveSection(block.type)"

@@ -154,6 +154,18 @@ const activeVersionSeo = computed(() => {
   }) || null;
 });
 
+const activeSlugOnlyHreflangHref = computed(() => {
+  const activeVersion = activeVersionSeo.value;
+  if (!activeVersion || activeVersion.hreflang) return "";
+  const rawHref = typeof activeVersion.hreflangUrl === "string"
+    ? activeVersion.hreflangUrl.trim()
+    : "";
+  if (!rawHref) return "";
+  return /^https?:\/\//i.test(rawHref)
+    ? rawHref
+    : buildAbsoluteHref(siteDomain, rawHref);
+});
+
 const canonicalHref = computed(() => {
   const explicitCanonical = typeof pageHead.value?.canonicalUrl === "string"
     ? pageHead.value.canonicalUrl.trim()
@@ -163,7 +175,7 @@ const canonicalHref = computed(() => {
   const versionCanonical = typeof activeVersionSeo.value?.canonicalUrl === "string"
     ? activeVersionSeo.value.canonicalUrl.trim()
     : "";
-  return explicitCanonical || versionCanonical || buildAbsoluteHref(pageDomain.value, canonicalPathValue.value);
+  return versionCanonical || explicitCanonical || buildAbsoluteHref(pageDomain.value, canonicalPathValue.value);
 });
 
 const ampHref = computed(() => {
@@ -175,7 +187,7 @@ const ampHref = computed(() => {
   const versionAmp = typeof activeVersionSeo.value?.ampUrl === "string"
     ? activeVersionSeo.value.ampUrl.trim()
     : "";
-  const rawAmp = explicitAmp || versionAmp;
+  const rawAmp = versionAmp || explicitAmp;
   if (!rawAmp) return "";
   return /^https?:\/\//i.test(rawAmp)
     ? rawAmp
@@ -193,6 +205,8 @@ const originalHreflangHref = computed(() => {
     ? explicitHref
     : buildAbsoluteHref(siteDomain, explicitHref);
 });
+
+const useOriginalHreflangAsXDefault = computed(() => Boolean(pageHead.value?.useHreflangAsXDefault));
 
 const normalizeSiteUrl = (value) => {
   if (!value) return "";
@@ -434,6 +448,10 @@ function resolveActivePageLang() {
 }
 
 const buildAlternateHref = (alterOrSlug = "") => {
+  if (!alterOrSlug && activeSlugOnlyHreflangHref.value) {
+    return activeSlugOnlyHreflangHref.value;
+  }
+
   if (!alterOrSlug && originalHreflangHref.value) {
     return originalHreflangHref.value;
   }
@@ -464,6 +482,13 @@ const buildAlternateHref = (alterOrSlug = "") => {
   return buildAbsoluteHref(siteDomain, combined);
 };
 
+const buildOriginalDefaultHref = () => {
+  if (useOriginalHreflangAsXDefault.value && originalHreflangHref.value) {
+    return originalHreflangHref.value;
+  }
+  return buildAbsoluteHref(siteDomain, canonicalSlugValue.value);
+};
+
 const alternateLinks = computed(() => {
   const links = [];
   const primaryLang = pagePrimaryLang.value || pageLang.value;
@@ -484,7 +509,7 @@ const alternateLinks = computed(() => {
   }
 
   const defaultAlter = normalizedAlters.value.find((alter) => alter.isDefault && alter.hreflang);
-  const xDefaultHref = defaultAlter ? buildAlternateHref(defaultAlter) : defaultHref;
+  const xDefaultHref = defaultAlter ? buildAlternateHref(defaultAlter) : buildOriginalDefaultHref();
   const xDefaultKey = `x-default-${xDefaultHref}`;
   if (!seen.has(xDefaultKey)) {
     links.push({ key: "alternate-x-default", rel: "alternate", hreflang: "x-default", href: xDefaultHref });
@@ -524,9 +549,12 @@ const schemaAuthor = computed(() => {
 const schemaReviews = computed(() => {
   const blocks = Array.isArray(data.value?.article?.blocks) ? data.value.article.blocks : [];
   const reviews = [];
-  for (const block of blocks) {
-    const blockReviews = Array.isArray(block?.reviews) ? block.reviews : [];
-    for (const review of blockReviews) {
+  const reviewGroups = [
+    Array.isArray(data.value?.article?.reviews) ? data.value.article.reviews : [],
+    ...blocks.map((block) => Array.isArray(block?.reviews) ? block.reviews : []),
+  ];
+  for (const group of reviewGroups) {
+    for (const review of group) {
       const authorName = stripHtml(
         review?.authorBio || review?.name || review?.author?.name || review?.author,
       );
