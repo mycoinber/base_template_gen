@@ -127,60 +127,62 @@ if (import.meta.server) {
     <MainLoader />
   </div>
 
-  <section
-    v-if="heroOffer"
-    class="reveal-up relative mb-10 w-full overflow-hidden max-[541px]:mb-6"
-  >
-    <AdsHero :offer="heroOffer" />
-  </section>
-  <section
-    v-else-if="heroMedia"
-    class="reveal-up relative mb-10 w-full overflow-hidden max-[541px]:mb-6"
-  >
-    <div class="container">
-      <div class="panel-card relative h-[40rem] overflow-hidden max-[541px]:min-h-[24rem]">
-        <img
-          :src="heroMediaSrc"
-          :alt="heroAlt"
-          class="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-        />
-        <div class="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-transparent via-black/55 to-background-01 pointer-events-none"></div>
+  <div data-fastgen-content-root>
+    <section
+      v-if="heroOffer"
+      class="reveal-up relative mb-10 w-full overflow-hidden max-[541px]:mb-6"
+    >
+      <AdsHero :offer="heroOffer" />
+    </section>
+    <section
+      v-else-if="heroMedia"
+      class="reveal-up relative mb-10 w-full overflow-hidden max-[541px]:mb-6"
+    >
+      <div class="container">
+        <div class="panel-card relative h-[40rem] overflow-hidden max-[541px]:min-h-[24rem]">
+          <img
+            :src="heroMediaSrc"
+            :alt="heroAlt"
+            class="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+          />
+          <div class="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-transparent via-black/55 to-background-01 pointer-events-none"></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <AdsHeroOfferList :offers="heroOfferList" />
+    <AdsHeroOfferList :offers="heroOfferList" />
 
-  <MainTitle v-if="data.article?.H1" :data="data" />
+    <MainTitle v-if="data.article?.H1" :data="data" />
 
-  <MainTableOfContent v-if="blocks.length && !monolithHtml" :data="data" />
+    <MainTableOfContent v-if="blocks.length && !monolithHtml" :data="data" />
 
-  <section v-if="monolithHtml" class="my-10 max-[541px]:my-6">
-    <div class="container">
-      <div
-        class="rich-content max-w-none overflow-hidden max-[541px]:[&_table]:block max-[541px]:[&_table]:w-full max-[541px]:[&_table]:max-w-full max-[541px]:[&_table]:overflow-x-auto max-[541px]:[&_table]:pb-2 max-[541px]:[&_table]:pr-2"
-        v-html="monolithHtml"
-      ></div>
-    </div>
-  </section>
+    <section v-if="monolithHtml" class="my-10 max-[541px]:my-6">
+      <div class="container">
+        <div
+          class="rich-content max-w-none overflow-hidden max-[541px]:[&_table]:block max-[541px]:[&_table]:w-full max-[541px]:[&_table]:max-w-full max-[541px]:[&_table]:overflow-x-auto max-[541px]:[&_table]:pb-2 max-[541px]:[&_table]:pr-2"
+          v-html="monolithHtml"
+        ></div>
+      </div>
+    </section>
 
-  <component
-    v-if="monolithReviews.length"
-    :is="sectionComponents.review"
-    :block="monolithReviewBlock"
-  />
+    <component
+      v-if="monolithReviews.length"
+      :is="sectionComponents.review"
+      :block="monolithReviewBlock"
+    />
 
-  <component
-    v-if="!monolithHtml"
-    v-for="block in blocks"
-    :key="block._id"
-    :is="resolveSection(block.type)"
-    :block="block"
-    :page="data"
-    :is-bot="isBot"
-    :is-loaded="isLoaded"
-  />
+    <component
+      v-if="!monolithHtml"
+      v-for="block in blocks"
+      :key="block._id"
+      :is="resolveSection(block.type)"
+      :block="block"
+      :page="data"
+      :is-bot="isBot"
+      :is-loaded="isLoaded"
+    />
 
-  <MainAuthor v-if="hasAuthor" :data="data" />
+    <MainAuthor v-if="hasAuthor" :data="data" />
+  </div>
 </template>
