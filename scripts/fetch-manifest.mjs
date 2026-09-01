@@ -20,13 +20,24 @@ const manifestResponse = await fetch(manifestUrl, {
   headers: { accept: 'application/json' },
 });
 
-if (!manifestResponse.ok) {
+// A favicon pack exists only after the site has a logo. A template without a
+// supplied/generated logo is still valid, so a missing manifest must not make
+// the Nuxt prebuild (or a sandbox preview) fail.
+const manifest = manifestResponse.status === 404
+  ? emptyManifest()
+  : manifestResponse.ok
+    ? await manifestResponse.json()
+    : null;
+
+if (!manifest) {
   throw new Error(
     `[fetch-manifest] Failed to fetch manifest: ${manifestResponse.status} ${manifestResponse.statusText}`,
   );
 }
 
-const manifest = await manifestResponse.json();
+if (manifestResponse.status === 404) {
+  console.warn('[fetch-manifest] No site manifest found; continuing without logo/favicon assets.');
+}
 
 await mkdir(publicDir, { recursive: true });
 
@@ -83,6 +94,10 @@ function resolveTemplateEnv() {
     backendBaseUrl,
     mediaStorageUrl,
   };
+}
+
+function emptyManifest() {
+  return { meta: {}, icons: [] };
 }
 
 function collectAssetsFromManifest(manifestPayload, storageBaseUrl) {
