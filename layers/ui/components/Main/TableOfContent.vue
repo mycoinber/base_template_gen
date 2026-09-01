@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   data: {
@@ -8,9 +8,6 @@ const props = defineProps({
   },
 })
 
-const isOpen = ref(false)
-const contentId = 'table-of-content-items'
-
 const tocItems = computed(() => {
   const blocks = Array.isArray(props.data?.article?.blocks) ? props.data.article.blocks : []
   return blocks.filter((block) => {
@@ -18,44 +15,26 @@ const tocItems = computed(() => {
     return Boolean(title)
   })
 })
-
-function toggle() {
-  isOpen.value = !isOpen.value
-}
 </script>
 
 <template>
   <section v-if="tocItems.length" class="my-10 max-[541px]:my-6">
     <div class="container">
-      <nav
-        class="panel-card w-full p-5 max-[541px]:p-4"
-      >
-        <button
-          type="button"
-          class="flex w-full items-center justify-between cursor-pointer select-none bg-transparent p-0 text-left"
-          :aria-expanded="isOpen"
-          :aria-controls="contentId"
-          data-fastgen-offer-navigation="off"
-          @click.stop="toggle"
-        >
+      <nav class="panel-card w-full p-5 max-[541px]:p-4">
+        <details class="group">
+          <summary
+            class="flex w-full cursor-pointer list-none items-center justify-between select-none bg-transparent p-0 text-left [&::-webkit-details-marker]:hidden"
+            data-fastgen-offer-navigation="off"
+          >
           <span class="font-font-02 text-xl uppercase tracking-[0.07em] text-color-03 max-[541px]:text-base">{{
             $t('table_of_content')
           }}</span>
-          <span
-            :class="[
-              'inline-block text-xl text-color-soft transition-transform duration-300',
-              { 'rotate-180': isOpen },
-            ]"
-          >
+          <span class="inline-block text-xl text-color-soft transition-transform duration-300 group-open:rotate-180">
             <Icon name="fluent:chevron-down-16-filled" />
           </span>
-        </button>
+          </summary>
 
-        <div
-          :id="contentId"
-          class="overflow-hidden transition-[max-height,opacity] duration-300"
-          :style="{ maxHeight: isOpen ? '25rem' : '0', opacity: isOpen ? '1' : '0' }"
-        >
+          <div class="overflow-hidden">
           <ul
             class="flex flex-col gap-2 list-none pt-4 m-0 pl-0"
             itemscope
@@ -76,7 +55,8 @@ function toggle() {
               </a>
             </li>
           </ul>
-        </div>
+          </div>
+        </details>
       </nav>
     </div>
   </section>

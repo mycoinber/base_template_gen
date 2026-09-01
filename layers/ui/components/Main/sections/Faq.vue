@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   block: {
@@ -17,10 +17,6 @@ const normalizedFaqs = computed(() => {
   });
 });
 
-const activeIndex = ref(0);
-const toggleFAQ = (index) => {
-  activeIndex.value = activeIndex.value === index ? null : index;
-};
 </script>
 
 <template>
@@ -29,36 +25,27 @@ const toggleFAQ = (index) => {
       <h2 class="text-left">{{ block?.headline || block?.H2 }}</h2>
 
       <div class="panel-card flex flex-col p-4 max-[541px]:p-3" itemscope itemtype="https://schema.org/FAQPage">
-        <div
+        <details
           v-for="(faq, index) in normalizedFaqs"
           :key="faq._id || index"
-          class="border-b border-border py-1 last:border-b-0"
+          :open="index === 0"
+          class="group border-b border-border py-1 last:border-b-0"
           itemscope
           itemtype="https://schema.org/Question"
           itemprop="mainEntity"
         >
-          <h3
-            :class="[
-              'flex cursor-pointer items-center justify-between gap-4 text-[1.1rem] font-semibold transition-colors duration-300 max-[541px]:text-base',
-              { 'text-color-03': activeIndex === index },
-              { 'text-color-white hover:text-color-02': activeIndex !== index }
-            ]"
-            itemprop="name"
-            @click="toggleFAQ(index)"
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 text-[1.1rem] font-semibold text-color-white transition-colors duration-300 hover:text-color-02 group-open:text-color-03 max-[541px]:text-base [&::-webkit-details-marker]:hidden"
           >
-            <span>{{ faq.question }}</span>
+            <span itemprop="name">{{ faq.question }}</span>
 
-            <span :class="['inline-block text-xl text-color-muted transition-transform duration-300', { 'rotate-180': activeIndex === index }]">
+            <span class="inline-block text-xl text-color-muted transition-transform duration-300 group-open:rotate-180">
               <Icon name="fluent:chevron-down-16-filled" />
             </span>
-          </h3>
+          </summary>
 
           <div
-            :class="[
-              'overflow-hidden transition-all duration-300',
-              { 'max-h-[25rem] opacity-100 py-3 max-[541px]:py-2': activeIndex === index },
-              { 'max-h-0 opacity-0': activeIndex !== index }
-            ]"
+            class="overflow-hidden py-3 max-[541px]:py-2"
             itemscope
             itemtype="https://schema.org/Answer"
             itemprop="acceptedAnswer"
@@ -69,7 +56,7 @@ const toggleFAQ = (index) => {
               v-html="faq.answer"
             />
           </div>
-        </div>
+        </details>
       </div>
     </div>
   </section>
