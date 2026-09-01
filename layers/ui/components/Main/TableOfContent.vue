@@ -9,6 +9,7 @@ const props = defineProps({
 })
 
 const isOpen = ref(false)
+const contentId = 'table-of-content-items'
 
 const tocItems = computed(() => {
   const blocks = Array.isArray(props.data?.article?.blocks) ? props.data.article.blocks : []
@@ -29,7 +30,14 @@ function toggle() {
       <nav
         class="panel-card w-full p-5 max-[541px]:p-4"
       >
-        <div class="flex items-center justify-between cursor-pointer select-none" @click="toggle">
+        <button
+          type="button"
+          class="flex w-full items-center justify-between cursor-pointer select-none bg-transparent p-0 text-left"
+          :aria-expanded="isOpen"
+          :aria-controls="contentId"
+          data-fastgen-offer-navigation="off"
+          @click.stop="toggle"
+        >
           <span class="font-font-02 text-xl uppercase tracking-[0.07em] text-color-03 max-[541px]:text-base">{{
             $t('table_of_content')
           }}</span>
@@ -41,14 +49,12 @@ function toggle() {
           >
             <Icon name="fluent:chevron-down-16-filled" />
           </span>
-        </div>
+        </button>
 
         <div
-          :class="[
-            'overflow-hidden transition-all duration-300',
-            { 'max-h-[25rem] opacity-100': isOpen },
-            { 'max-h-0 opacity-0': !isOpen },
-          ]"
+          :id="contentId"
+          class="overflow-hidden transition-[max-height,opacity] duration-300"
+          :style="{ maxHeight: isOpen ? '25rem' : '0', opacity: isOpen ? '1' : '0' }"
         >
           <ul
             class="flex flex-col gap-2 list-none pt-4 m-0 pl-0"
