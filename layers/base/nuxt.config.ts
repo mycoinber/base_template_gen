@@ -20,6 +20,8 @@ export default defineNuxtConfig({
     appManifest: process.env.NODE_ENV === "production",
   },
   routeRules: {
+    "/robots.txt": { isr: false, cache: false },
+    "/sitemap.xml": { isr: false, cache: false },
     "/**": { isr: 7200 },
   },
   modules: [
@@ -30,8 +32,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "nuxt-schema-org",
     "nuxt-og-image",
-    "@nuxtjs/robots",
-    "@nuxtjs/sitemap",
     "nuxt-vitalizer",
   ],
   schemaOrg: {
