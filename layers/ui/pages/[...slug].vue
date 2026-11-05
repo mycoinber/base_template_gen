@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import { staticHead as fastgenStaticHead } from "../../base/utils/staticHead";
 import { useI18n } from "vue-i18n";
 import { manifestToHead } from "#layers/base/utils/manifestHead";
 import { dedupeLinks, dedupeMeta, toContentString } from "#layers/base/utils/headUtils";
@@ -31,6 +32,9 @@ const slugArray = Array.isArray(rawSlug)
 const slug = slugArray.length ? slugArray.join("/") : "";
 // Получаем данные страницы
 const { data, status, error } = await usePageData(siteId, slug);
+if (data.value?.redirect?.to) {
+  await navigateTo(data.value.redirect.to, { redirectCode: data.value.redirect.statusCode || 302, external: /^https?:\/\//i.test(data.value.redirect.to) });
+}
 
 if (error.value) {
   throw error.value;
@@ -50,7 +54,7 @@ if (import.meta.server) {
   const isHomePage = Number(data.value?.homePage) === 1;
   const hasLocalePrefix = Boolean(data.value?.localePrefix);
 
-  if (isHomePage && !hasLocalePrefix && requestedSlug) {
+  if (!Object.prototype.hasOwnProperty.call(data.value || {}, "originalSlug") && isHomePage && !hasLocalePrefix && requestedSlug) {
     await navigateTo("/", {
       redirectCode: 301,
     });
@@ -860,16 +864,30 @@ const headNoScripts = computed(() => [
   })) : [])
 ]);
 
-useHead({
-  htmlAttrs: { lang: pageLang.value },
-  title: pageHead.value.title || "Website",
-  meta: headMeta.value,
-  link: headLinks.value,
-  script: headScripts.value,
-  noscript: headNoScripts.value,
-});
+const fastgenHasStaticHead = computed(() => typeof data.value?.advancedHead?.html === "string");
+useHead(computed(() => {
+  if (fastgenHasStaticHead.value) {
+    const saved = fastgenStaticHead(data.value.advancedHead.html);
+    return {
+      ...saved,
+      htmlAttrs: { lang: data.value.advancedHead.lang || pageLang.value || "en" },
+      meta: [...(manifestHead.value.meta || []), ...saved.meta],
+      link: [...(manifestHead.value.link || []), ...saved.link],
+      script: [...headScripts.value, ...saved.script],
+      noscript: [...headNoScripts.value, ...saved.noscript],
+    };
+  }
+  return {
+    htmlAttrs: { lang: pageLang.value },
+    title: pageHead.value.title || "Website",
+    meta: headMeta.value,
+    link: headLinks.value,
+    script: headScripts.value,
+    noscript: headNoScripts.value,
+  };
+}));
 
-useSchemaOrg(schemaNodes);
+useSchemaOrg(computed(() => fastgenHasStaticHead.value ? [] : schemaNodes.value));
 
 if (data.value?.lang) {
   locale.value = data.value.lang;
@@ -997,9 +1015,9 @@ const toHeadHtmlNoScripts = computed(() => {
 
 // Merge additional head assets from code blocks
 useHead({
-  meta: toHeadHtmlMeta.value,
-  link: toHeadHtmlLinks.value,
-  script: [...toHeadScripts.value, ...toHeadLdJson.value, ...toHeadHtmlScripts.value],
+  meta: fastgenHasStaticHead.value ? [] : toHeadHtmlMeta.value,
+  link: fastgenHasStaticHead.value ? [] : toHeadHtmlLinks.value,
+  script: [...toHeadScripts.value, ...(fastgenHasStaticHead.value ? [] : toHeadLdJson.value), ...toHeadHtmlScripts.value.filter(entry => !fastgenHasStaticHead.value || entry.type !== "application/ld+json")],
   style: [...toHeadStyles.value, ...toHeadHtmlStyles.value],
   noscript: toHeadHtmlNoScripts.value,
 });

@@ -11,7 +11,7 @@ const fetchPagePayload = async (
   const endpoint = `${backendBase}/pages/${siteId}`;
   return $fetch<any>(endpoint, {
     method: "GET",
-    params: slug ? { slug } : undefined,
+    params: { routing: 'exact', ...(slug ? { slug } : {}) },
   });
 };
 
